@@ -7,9 +7,14 @@ import axios from 'axios'
 const App: React.FC = () => {
   const [todo, setTodo] = useState<string>("")
 
-  function doClick(): void {
-    axios.get('http://localhost:8080/attack?fromId=1&toId=2')
-    .then((response) => console.log(response))
+  function doClick(a: string): void {
+    axios.get('http://localhost:8080/attack?fromId=1&toId=2'+(a?'&attack='+a:''))
+    .then((response) => {
+      const data = response.data
+      if(response.data.attack.length>0)
+        alert("tu ataque fue exitoso: "+response.data.attack[0]+". El x es "+data.x)
+      }
+    )
   }
 
   console.log(todo);
@@ -17,7 +22,6 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <span className="heading">TODO</span>
-      <button className='input__submit' type='submit' onClick={doClick}>Go1</button>
       <InputField onClick={doClick} todo={todo} setTodo={setTodo} />
     </div>
   );
