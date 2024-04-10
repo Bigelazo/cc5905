@@ -5,9 +5,10 @@ interface Props {
   name: string;
   healthPointss: number;
   attack: number;
+  ataque1Loco: (id:number) => void;
 }
 
-const Character = ({ name, healthPointss, attack }: Props) => {
+const Character = ({ name, healthPointss, attack, ataque1Loco }: Props) => {
   const [healthPoints, setHealthPoints] = useState(20);
 
   return (
@@ -16,7 +17,8 @@ const Character = ({ name, healthPointss, attack }: Props) => {
       <div>Vida: {healthPoints}</div>
       <div>Daño:{attack}</div>
       <Button
-        variant="outlined"
+        variant="contained"
+        size="small"
         onClick={() => setHealthPoints(healthPoints - 1)}
       >
         Attack Button
