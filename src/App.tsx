@@ -1,30 +1,19 @@
-import React, { useCallback, useState } from 'react';
-import logo from './logo.svg';
-import './App.css';
-import InputField from './components/InputField';
-import axios from 'axios'
+import Character from "./components/Character";
+import { Grid } from "@mui/material";
 
-const App: React.FC = () => {
-  const [todo, setTodo] = useState<string>("")
-
-  function doClick(a: string): void {
-    axios.get('http://localhost:8080/attack?fromId=1&toId=2'+(a?'&attack='+a:''))
-    .then((response) => {
-      const data = response.data
-      if(response.data.attack.length>0)
-        alert("tu ataque fue exitoso: "+response.data.attack[0]+". El x es "+data.x)
-      }
-    )
-  }
-
-  console.log(todo);
-
+const App = () => {
   return (
-    <div className="App">
-      <span className="heading">TODO</span>
-      <InputField onClick={doClick} todo={todo} setTodo={setTodo} />
-    </div>
+    <>
+      <Grid container spacing={12} justifyContent="center">
+        <Grid item>
+          <Character name="Daniel" healthPointss={10} attack={10} />
+        </Grid>
+        <Grid item>
+          <Character name="Matías" healthPointss={20} attack={5} />
+        </Grid>
+      </Grid>
+    </>
   );
-}
+};
 
 export default App;
