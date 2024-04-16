@@ -1,27 +1,28 @@
-import React, { useState } from "react";
+import React, { ReactNode, useState } from "react";
 import { Button } from "@mui/material";
+import Character1 from "../Character1";
 
 interface Props {
-  name: string;
-  healthPointss: number;
-  attack: number;
-  ataque1Loco: (id:number) => void;
+  c: Character1;
+  ataque1Loco: (id: number) => void;
 }
 
-const Character = ({ name, healthPointss, attack, ataque1Loco }: Props) => {
-  const [healthPoints, setHealthPoints] = useState(20);
+const Character = ({ c, ataque1Loco }: Props) => {
+  const [name, setName] = useState(c.name);
+  const [healthPoints, setHealthPoints] = useState(c.hp);
+  const [attackDamage, setAttackDamage] = useState(c.atk);
 
   return (
     <>
       <div>Nombre: {name}</div>
       <div>Vida: {healthPoints}</div>
-      <div>Daño:{attack}</div>
+      <div>Daño:{c.atk}</div>
       <Button
         variant="contained"
         size="small"
         onClick={() => setHealthPoints(healthPoints - 1)}
       >
-        Attack Button
+        Attack
       </Button>
     </>
   );
