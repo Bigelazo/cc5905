@@ -14,25 +14,37 @@ const App = () => {
 
   return (
     <>
-      <div className="container">
-        <div className="grid-left">
-          {elements.map((row) => {
-            return (
-              <div className="panel">
-                <Character c={c1} ataque1Loco={ataque1Loco} />
-              </div>
-            );
-          })}
+      <div className="main-container">
+        <div className="info-container">
+          The information should be displayed here.
         </div>
-        <div className="grid-right">
-          {elements.map((row) => {
-            return (
-              <div className="panel">
-                <Character c={c2} ataque1Loco={ataque1Loco} />
-              </div>
-            );
-          })}
+
+        <div className="grid-container">
+          <div className="turn-container">
+            {elements.map((row) => {
+              return <div>TURN</div>;
+            })}
+          </div>
+          <div className="grid-left">
+            {elements.map((row) => {
+              return (
+                <div className="panel">
+                  <Character c={c1} ataque1Loco={ataque1Loco} />
+                </div>
+              );
+            })}
+          </div>
+          <div className="grid-right">
+            {elements.map((row) => {
+              return (
+                <div className="panel">
+                  <Character c={c2} ataque1Loco={ataque1Loco} />
+                </div>
+              );
+            })}
+          </div>
         </div>
+        <div className="menu-container">Menu</div>
       </div>
     </>
   );

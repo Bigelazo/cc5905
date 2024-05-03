@@ -2,9 +2,39 @@ html {
   background-color: lightblue;
 }
 
-.container {
+.main-container {
   display: flex;
-  justify-content: space-between; 
+  flex-direction: column;
+  justify-content: space-evenly;
+  gap: 1em;
+}
+
+.info-container {
+  background-color: blue;
+  display: flex;
+  justify-content: center;
+  border: 0.25rem solid black;
+  border-radius: 2em;
+  padding: 1em;
+}
+
+.grid-container {
+  background-color: lightgreen;
+  display: flex;
+  justify-content: space-between;
+  border: 3px solid black;
+  border-radius: 2em;
+  padding: 1%;
+}
+
+.turn-container {
+  background-color: blue;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  border: 0.2em solid black;
+  border-radius: 2em;
+  padding: 1em;
 }
 
 .grid-left {
@@ -33,5 +63,14 @@ html {
 .panel {
   border: 1px solid black;
   border-radius: 5px;
+  padding: 1em;
+}
+
+.menu-container {
+  background-color: blue;
+  border: 0.25em solid black;
+  border-radius: 2em;
+  display: flex;
+  justify-content: center;
   padding: 1em;
 }
