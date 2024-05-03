@@ -1,0 +1,37 @@
+html {
+  background-color: lightblue;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between; 
+}
+
+.grid-left {
+  display: grid;
+  gap: 1rem;
+  background: red;
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 1rem;
+  width: 40%;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-right {
+  display: grid;
+  gap: 1rem;
+  background: green;
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 1rem;
+  width: 40%;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* Element inside each grid */
+.panel {
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 1em;
+}
