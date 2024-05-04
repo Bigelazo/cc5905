@@ -1,6 +1,7 @@
 import Character from "./components/Character";
 import Character1 from "./Character1";
 import "./styles/style.css";
+import "./styles/menu.css";
 
 const App = () => {
   const elements: number[] = Array.from(Array(9).keys());
@@ -25,6 +26,7 @@ const App = () => {
               return <div>TURN</div>;
             })}
           </div>
+
           <div className="grid-left">
             {elements.map((row) => {
               return (
@@ -34,6 +36,7 @@ const App = () => {
               );
             })}
           </div>
+
           <div className="grid-right">
             {elements.map((row) => {
               return (
@@ -44,7 +47,43 @@ const App = () => {
             })}
           </div>
         </div>
-        <div className="menu-container">Menu</div>
+
+        <div className="menu-container">
+          <div className="unit-info">
+            <div className="headers">
+              <h5>Name</h5>
+              <h5>Info 1</h5>
+              <h5>Info 2</h5>
+              <h5>Info 3</h5>
+            </div>
+            <div className="info">
+              <p>Bad guy 1</p>
+              <p>Bad guy 1</p>
+              <p>Bad guy 1</p>
+              <p>Bad guy 1</p>
+            </div>
+          </div>
+          <div className="action-selection">
+            <p>Option 1</p>
+            <p>Option 2</p>
+            <p>Option 3</p>
+            <p>Option 4</p>
+          </div>
+          <div className="unit-info">
+            <div className="headers">
+              <h5>Name</h5>
+              <h5>Info 1</h5>
+              <h5>Info 2</h5>
+              <h5>Info 3</h5>
+            </div>
+            <div className="info">
+              <p>Bad guy 1</p>
+              <p>Bad guy 1</p>
+              <p>Bad guy 1</p>
+              <p>Bad guy 1</p>
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );
