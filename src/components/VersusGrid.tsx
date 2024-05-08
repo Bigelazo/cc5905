@@ -6,10 +6,26 @@ import "../styles/grid.css";
 const VersusGrid = () => {
   const elements: number[] = Array.from(Array(4).keys());
 
-  const c1: Character_ = new Character_("Daniel", 100, 10);
-  const c2: Character_ = new Character_("Mati", 200, 5);
+  const createCharacters = async () => {
+    let characters: Character_[] = [];
+    const response = await fetch("http://localhost:8080/character");
+    const characterInformation = await response.json();
+    for (const c of characterInformation) {
+      characters.push(new Character_(c[0], c[1], c[2], c[3]));
+    }
+    return characters;
+  };
 
-  function receiveDamage(atk: number): void {
+  const characterList: Promise<Character_[]> = createCharacters();
+
+  const allies = characterList.then((resolved) => {
+    resolved.slice(0, 2);
+  });
+  const enemies = characterList.then((resolved) => {
+    resolved.slice(2, 5);
+  });
+
+  function attack(fromId: number, toId: number): void {
     return;
   }
   return (
@@ -24,7 +40,12 @@ const VersusGrid = () => {
         {elements.map((row) => {
           return (
             <div className="grid__panel">
-              <Character c={c1} receiveDamage={receiveDamage} />
+              <Character
+                c={characterList.then((resolved) => {
+                  resolved[0];
+                })}
+                attack={attack(1, 2)}
+              />
             </div>
           );
         })}
@@ -34,7 +55,7 @@ const VersusGrid = () => {
         {elements.map((row) => {
           return (
             <div className="grid__panel">
-              <Character c={c2} receiveDamage={receiveDamage} />
+              <Character c={characterList[1]} attack={attack(1, 2)} />
             </div>
           );
         })}

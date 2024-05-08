@@ -1,10 +1,12 @@
 class Character_ {
+  id: number;
   name: string;
   hp: number;
   atk: number;
   isDefeated: boolean;
 
-  constructor(name: string, hp: number, atk: number) {
+  constructor(id: number, name: string, hp: number, atk: number) {
+    this.id = id;
     this.name = name;
     this.hp = hp;
     this.atk = atk;

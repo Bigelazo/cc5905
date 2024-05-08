@@ -1,6 +1,5 @@
 import Menu from "./components/Menu";
 import "./styles/style.css";
-import Character_ from "./model/Character_";
 import VersusGrid from "./components/VersusGrid";
 
 const App = () => {

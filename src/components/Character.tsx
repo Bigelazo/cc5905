@@ -4,10 +4,10 @@ import Character_ from "../model/Character_";
 
 interface Props {
   c: Character_;
-  receiveDamage: (atk: number) => void;
+  attack: (fromId: number, toId: number) => void;
 }
 
-const Character = ({ c, receiveDamage }: Props) => {
+const Character = ({ c, attack }: Props) => {
   const [name, setName] = useState(c.name);
   const [healthPoints, setHealthPoints] = useState(c.hp);
   const [attackDamage, setAttackDamage] = useState(c.atk);
@@ -17,11 +17,7 @@ const Character = ({ c, receiveDamage }: Props) => {
       <div>{name}</div>
       <div>Hp: {healthPoints}</div>
       <div>Atk: {c.atk}</div>
-      <Button
-        variant="contained"
-        size="small"
-        onClick={() => setHealthPoints(healthPoints - c.atk)}
-      >
+      <Button variant="contained" size="small" onClick={() => attack}>
         Atk
       </Button>
     </>
