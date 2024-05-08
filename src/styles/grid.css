@@ -1,0 +1,44 @@
+.grid-container {
+  background-color: greenyellow;
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid black;
+  border-radius: 1em;
+  padding: 1em;
+}
+
+.turn-container {
+  background-color: blue;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  border: 0.1em solid black;
+  border-radius: 2em;
+  padding: 1em;
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 1rem;
+  width: 40%;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid--left {
+  background-color: red;
+}
+
+.grid--right {
+  background-color: green;
+}
+
+/* Element inside each grid */
+.grid__panel {
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 1em;
+  background-color: cadetblue;
+}

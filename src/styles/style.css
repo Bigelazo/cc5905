@@ -1,11 +1,18 @@
 html {
-  background-color: lightblue;
-  font-family: 'Final Fantasy', sans-serif;
+  background: #cedade;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-bottom: 1rem;
 }
 
 @font-face {
   font-family: 'Final Fantasy';
   src: url('/public/font/Final-Fantasy.ttf') format('opentype');
+}
+
+@font-face {
+  font-family: 'DeluxePaint Comic';
+  src: url('/public/font/dpcomic.ttf') format('opentype');
 }
 
 .main-container {
@@ -16,58 +23,10 @@ html {
 }
 
 .info-container {
-  background-color: blue;
+  background-color: #5499b5;
   display: flex;
   justify-content: center;
-  border: 0.25rem solid black;
-  border-radius: 2em;
-  padding: 1em;
-}
-
-.grid-container {
-  background-color: lightgreen;
-  display: flex;
-  justify-content: space-between;
-  border: 3px solid black;
-  border-radius: 2em;
-  padding: 1%;
-}
-
-.turn-container {
-  background-color: blue;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  border: 0.2em solid black;
-  border-radius: 2em;
-  padding: 1em;
-}
-
-.grid-left {
-  display: grid;
-  gap: 1rem;
-  background: red;
-  border: 1px solid black;
-  border-radius: 10px;
-  padding: 1rem;
-  width: 40%;
-  grid-template-columns: repeat(3, 1fr);
-}
-
-.grid-right {
-  display: grid;
-  gap: 1rem;
-  background: green;
-  border: 1px solid black;
-  border-radius: 10px;
-  padding: 1rem;
-  width: 40%;
-  grid-template-columns: repeat(3, 1fr);
-}
-
-/* Element inside each grid */
-.panel {
-  border: 1px solid black;
-  border-radius: 5px;
+  border: 0.25rem solid #62471d;
+  border-radius: 1.5em;
   padding: 1em;
 }
