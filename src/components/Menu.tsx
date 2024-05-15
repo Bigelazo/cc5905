@@ -1,7 +1,13 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/menu.css";
+import { Button } from "@mui/material";
 
 const Menu = () => {
+  const [actionSelected, setActionSelected] = useState<number | null>(null);
+
+  const onAction = (id: number) => () => {
+    setActionSelected(id);
+  }
   return (
     <div className="menu-container">
       <div className="left-info">
@@ -19,7 +25,13 @@ const Menu = () => {
         </div>
       </div>
       <div className="action-selection">
-        <p>Option 1</p>
+        <p>
+          <Button variant="contained" size="small" onClick={onAction(0)}
+            sx={actionSelected == 0?{ backgroundColor: 'yellow', '&:hover': { backgroundColor: 'darkyellow' } }:{}}
+          >
+            Attack
+          </Button>
+        </p>
         <p>Option 2</p>
         <p>Option 3</p>
         <p>Option 4</p>

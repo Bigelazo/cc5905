@@ -80,8 +80,10 @@ const VersusGrid = ({ setMessage, rows, columns }: Props) => {
         style={{
           gridTemplateColumns: `repeat(${columns}, 1fr)`,
           gridTemplateRows: `repeat(${rows}, 1fr)`,
+          position: "relative"
         }}
       >
+        
         {allies.map((c: Character) => {
           return (
             <div
