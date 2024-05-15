@@ -5,13 +5,13 @@ vista para los proyectos del curso CC3002 Metodologías de Diseño y Programaci�
 
 ## TODO:
 
-- [ ] Aprender React:
+- [x] Aprender React:
 
-  - [ ] [Tutorial oficial](https://reactjs.org/tutorial/tutorial.html)
+  - [x] [Tutorial oficial](https://reactjs.org/tutorial/tutorial.html)
 
-- [ ] Aprender TypeScript:
+- [x] Aprender TypeScript:
 
-  - [ ] [Tutorial oficial](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
+  - [x] [Tutorial oficial](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
 
 - [ ] Aprender Scala Cask
 
@@ -32,9 +32,9 @@ vista para los proyectos del curso CC3002 Metodologías de Diseño y Programaci�
 
   Primeramente, una unidad contará con las siguientes propiedades:
 
-  - [ ] Puntos de vida
+  - [x] Puntos de vida
   - [ ] Puntos de defensa
-  - [ ] Puntos de ataque
+  - [x] Puntos de ataque
 
   Un panel contará con las siguientes propiedades, siendo posibles nulos por defecto:
 

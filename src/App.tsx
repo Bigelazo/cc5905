@@ -9,10 +9,8 @@ const App = () => {
   return (
     <>
       <div className="main-container">
-        <div className="info-container">
-          {message}
-        </div>
-        <VersusGrid setMessage={setMessage}/>
+        <div className="info-container">{message}</div>
+        <VersusGrid setMessage={setMessage} rows={4} columns={4} />
         <Menu />
       </div>
     </>

@@ -2,64 +2,76 @@ import React, { useEffect, useState } from "react";
 import CharacterComponent from "./CharacterComponent";
 import Character from "../model/Character";
 import "../styles/grid.css";
-import axios from 'axios';
+import axios from "axios";
+import PanelComponent from "./PanelComponent";
 
-const host = "http://localhost:8080"
+const host = "http://localhost:8080";
 
 interface Props {
   setMessage: (message: string) => void;
+  rows: number;
+  columns: number;
 }
 
-const VersusGrid = ({ setMessage }: Props) => {
-  const elements: number[] = Array.from(Array(4).keys());
+const VersusGrid = ({ setMessage, rows, columns }: Props) => {
   const [allies, setAllies] = useState<Character[]>([]);
   const [enemies, setEnemies] = useState<Character[]>([]);
   const [currentPlayer, setCurrentPlayer] = useState<number | null>(null);
-  
 
   const loadCharacters = () => {
-    axios.get(host + "/character").then((response: any) => {    
+    axios.get(host + "/character").then((response: any) => {
       const characters: Character[] = response.data.characters.map((c: any) => {
         return new Character(c.id, c.name, c.hp, c.attack);
       });
-      console.log("response.data.characters", response.data.characters)
-      console.log("ncontre", characters)
       setAllies(characters.slice(0, 6));
       setEnemies(characters.slice(6, 12));
       setCurrentPlayer(response.data.currentPlayer);
-    })
-    
+    });
   };
 
   useEffect(() => {
     loadCharacters();
   }, []);
-  
 
   function attack(toId: number): void {
-    if(currentPlayer){
-      console.log("atacando de", currentPlayer, "para", toId)
-      axios.get(host + "/attack/" + currentPlayer + "/" + toId).then((response: any) => {
-        setMessage(response.data.message)
-        loadCharacters();
-      })
+    if (currentPlayer) {
+      axios
+        .get(host + "/attack/" + currentPlayer + "/" + toId)
+        .then((response: any) => {
+          setMessage(response.data.message);
+          loadCharacters();
+        });
     }
     return;
   }
 
-  console.log("allies", allies)
   return (
     <div className="grid-container">
       <div className="turn-container">
         {allies.concat(enemies).map((c) => {
-          return <div style={currentPlayer == c.id?{border: "1px solid yellow"}:{}}>{c.name}</div>;
+          return (
+            <div
+              style={currentPlayer == c.id ? { border: "3px solid green" } : {}}
+            >
+              {c.name}
+            </div>
+          );
         })}
       </div>
 
-      <div className="grid grid--left">
+      <div
+        className="grid"
+        style={{
+          gridTemplateColumns: `repeat(${columns}, 1fr)`,
+          gridTemplateRows: `repeat(${rows}, 1fr)`,
+        }}
+      >
         {allies.map((c: Character) => {
           return (
-            <div className="grid__panel" style={currentPlayer == c.id?{border: "1px solid yellow"}:{}}>
+            <div
+              className="grid__panel"
+              style={currentPlayer == c.id ? { border: "3px solid green" } : {}}
+            >
               <CharacterComponent
                 c={c}
                 attack={attack}
@@ -70,13 +82,15 @@ const VersusGrid = ({ setMessage }: Props) => {
         })}
       </div>
 
-      <div className="grid grid--right">
-        {enemies.map((c) => {
-          return (
-            <div className="grid__panel">
-              <CharacterComponent c={c} attack={attack} currentPlayer={currentPlayer} />
-            </div>
-          );
+      <div
+        className="grid"
+        style={{
+          gridTemplateColumns: `repeat(${columns}, 1fr)`,
+          gridTemplateRows: `repeat(${rows}, 1fr)`,
+        }}
+      >
+        {enemies.map((c: Character, index: number) => {
+          return <PanelComponent x={index % columns} y={index % rows} />;
         })}
       </div>
     </div>

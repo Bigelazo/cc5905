@@ -1,8 +1,9 @@
 html {
-  background: #cedade;
+  background: #F6F2D4;
   padding-left: 2rem;
   padding-right: 2rem;
   padding-bottom: 1rem;
+  font-family: 'DeluxePaint Comic';
 }
 
 @font-face {
@@ -23,11 +24,10 @@ html {
 }
 
 .info-container {
-  background-color: #5499b5;
+  background-color: #5584AC;
   display: flex;
   justify-content: center;
-  border: 0.25rem solid #62471d;
-  border-radius: 1.5em;
+  border: 10px ridge lightgray;
   padding: 1em;
   height: 20px;
 }

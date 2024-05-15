@@ -4,7 +4,7 @@ import "../styles/menu.css";
 const Menu = () => {
   return (
     <div className="menu-container">
-      <div className="unit-info">
+      <div className="left-info">
         <div className="headers">
           <h5>Name</h5>
           <h5>Info 1</h5>
@@ -24,7 +24,7 @@ const Menu = () => {
         <p>Option 3</p>
         <p>Option 4</p>
       </div>
-      <div className="unit-info">
+      <div className="right-info">
         <div className="headers">
           <h5>Name</h5>
           <h5>Info 1</h5>
