@@ -13,6 +13,22 @@ interface Props {
   columns: number;
 }
 
+/* para que no se me olvide:
+backend
+character tiene panel como atributo
+panel tiene lista de character como atributo
+panel tiene coordenadas como atributo
+character llama a panel.coordenadas para saber dónde está parado
+
+enviar todos los paneles del juego por json
+enviar en la lista de personajes los paneles -> /character
+
+después:
+buscar la manera de que PanelComponent pueda tener un CharacterComponent dentro con
+las cosas que están definidas aquí, que en realidad debiesen estar en App.tsx
+preguntar cómo ir bajando esa info por partes y solo lo necesario para cada subcomponente
+*/
+
 const VersusGrid = ({ setMessage, rows, columns }: Props) => {
   const [allies, setAllies] = useState<Character[]>([]);
   const [enemies, setEnemies] = useState<Character[]>([]);
