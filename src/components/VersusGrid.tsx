@@ -89,8 +89,8 @@ const VersusGrid = ({ setMessage, rows, columns }: Props) => {
           gridTemplateRows: `repeat(${rows}, 1fr)`,
         }}
       >
-        {enemies.map((c: Character, index: number) => {
-          return <PanelComponent x={index % columns} y={index % rows} />;
+        {enemies.map((c: Character) => {
+          return <PanelComponent x={1} y={1} />;
         })}
       </div>
     </div>
