@@ -34,6 +34,9 @@
   background-color: #22577E;
 }
 
-.grid__panel:hover {
+.grid__panel.selection:hover {
   border-color: yellow;
+}
+.grid__panel.selection {
+  cursor: pointer;
 }

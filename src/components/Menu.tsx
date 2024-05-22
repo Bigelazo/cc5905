@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import "../styles/menu.css";
 import { Button } from "@mui/material";
+import BigelButton from "./BigelButton";
 
-const Menu = () => {
-  const [actionSelected, setActionSelected] = useState<number | null>(null);
+interface Props {
+  setActionSelected: (action: number) => void,
+  actionSelected: number | null,
+}
 
-  const onAction = (id: number) => () => {
-    setActionSelected(id);
-  }
+const Menu = ({setActionSelected, actionSelected}: Props) => {
+  
   return (
     <div className="menu-container">
       <div className="left-info">
@@ -25,16 +27,9 @@ const Menu = () => {
         </div>
       </div>
       <div className="action-selection">
-        <p>
-          <Button variant="contained" size="small" onClick={onAction(0)}
-            sx={actionSelected == 0?{ backgroundColor: 'yellow', '&:hover': { backgroundColor: 'darkyellow' } }:{}}
-          >
-            Attack
-          </Button>
-        </p>
-        <p>Option 2</p>
-        <p>Option 3</p>
-        <p>Option 4</p>
+        <BigelButton onClick={() => setActionSelected(1)} selected={actionSelected==1}>Attack</BigelButton>
+        <BigelButton onClick={() => setActionSelected(2)} selected={actionSelected==2}>Defend</BigelButton>
+        <BigelButton onClick={() => setActionSelected(3)} selected={actionSelected==3}>Fireball</BigelButton>
       </div>
       <div className="right-info">
         <div className="headers">

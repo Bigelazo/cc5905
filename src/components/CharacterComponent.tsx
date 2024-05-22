@@ -4,21 +4,18 @@ import Character from "../model/Character";
 
 interface Props {
   c: Character;
-  attack: (toId: number) => void;
   currentPlayer: number | null;
+  doActionSelected: (c: number) => () => void;
 }
 
-const CharacterComponent = ({ c, attack, currentPlayer }: Props) => {
+const CharacterComponent = ({ c, currentPlayer, doActionSelected }: Props) => {
   
   return (
-    <>
+    <div style={currentPlayer == c.id?{color: "yellow"}:{}} onClick={doActionSelected(c.id)}>
       <div>{c.name}</div>
       <div>Hp: {c.hp}</div>
       <div>Atk: {c.atk}</div>
-      <Button variant="contained" size="small" onClick={() => attack(c.id)}>
-        Atk
-      </Button>
-    </>
+    </div>
   );
 };
 

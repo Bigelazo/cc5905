@@ -8,19 +8,29 @@ interface Props {
   id: number;
   x: number;
   y: number;
-  children: ReactNode;
   assign: (p: number, c: number) => void;
+  movables: Character[];
+  currentPlayer: number | null;
+  doActionSelected: (c: number) => () => void;
+  actionSelected: number | null;
 }
 
-const PanelComponent = ({ id, x, y, children, assign }: Props) => {
+const PanelComponent = ({ id, x, y, movables, currentPlayer, actionSelected, doActionSelected }: Props) => {
   return (
     <div
-      className="grid__panel"
       style={{ gridColumnStart: x, gridRowStart: y }}
+      className={"grid__panel"+(actionSelected!==null ? " selection" : "")}
     >
-      ({x},{y}) id={id}
-      {children}
-      <Button onClick={() => assign(1, 3)}>Do</Button>
+      {movables.map((c: Character) => {
+          return (
+            <CharacterComponent
+              key={c.id}
+              c={c}
+              currentPlayer={currentPlayer}
+              doActionSelected={doActionSelected}
+            />
+          );
+        })}
     </div>
   );
 };
