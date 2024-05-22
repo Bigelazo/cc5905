@@ -4,6 +4,9 @@
   justify-content: space-between;
   border: 15px ridge lightgray;
   padding: 1em;
+  box-shadow:
+    inset 0 -3em 3em rgba(0, 0, 0, 0.1),
+    0.3em 0.3em 1em rgba(0, 0, 0, 0.3);
 }
 
 .turn-container {
@@ -24,7 +27,6 @@
   width: 40%;
 }
 
-/* Element inside each grid */
 .grid__panel {
   border: 3px solid black;
   border-radius: 10px;
