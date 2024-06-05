@@ -22,8 +22,8 @@ const VersusGrid = ({ setMessage, rows, columns }: Props) => {
 
   const [actionSelected, setActionSelected] = useState<number | null>(null);
 
-
-  const isCurrentPlayerAlly = allies.find(c => c.id === currentPlayer) != null
+  const isCurrentPlayerAlly =
+    allies.find((c) => c.id === currentPlayer) != null;
 
   const [panels, setPanels] = useState<Panel[]>([]);
 
@@ -64,16 +64,13 @@ const VersusGrid = ({ setMessage, rows, columns }: Props) => {
     loadGameData();
   }, []);
 
-  useEffect(() => {
-  }, [actionSelected])
+  useEffect(() => {}, [actionSelected]);
 
   const assignPanel = (cId: number, pId: number) => {
     axios
       .post(`${host}/assign/${cId}/${pId}`)
       .then((response) => console.log(response));
   };
-
-  const winConditionReached = () => {};
 
   const loadCharacters = () => {
     axios.get(`${host}/character`).then((response: any) => {
@@ -93,7 +90,7 @@ const VersusGrid = ({ setMessage, rows, columns }: Props) => {
     } else if (status === -1) {
       setMessage("Game Over: You Lose!");
     }
-  }
+  };
 
   const attack = (toId: number) => {
     if (currentPlayer) {
@@ -108,51 +105,51 @@ const VersusGrid = ({ setMessage, rows, columns }: Props) => {
   };
 
   const doActionSelected = (toId: number) => () => {
-    if(actionSelected===1){
-      attack(toId)
+    if (actionSelected === 1) {
+      attack(toId);
     }
-    setActionSelected(null)
-  }
+    setActionSelected(null);
+  };
 
   return (
     <div>
-    <div className="grid-container">
-      <div className="turn-container">
-        {allies.concat(enemies).map((c) => {
-          return (
-            <div
-              key={c.id}
-              style={currentPlayer === c.id ? { color: "green" } : {}}
-            >
-              {c.name}
-            </div>
-          );
-        })}
-      </div>
-      <div
-        className="grid"
-        style={{
-          gridTemplateColumns: `repeat(${columns}, 1fr)`,
-          gridTemplateRows: `repeat(${rows}, 1fr)`,
-          position: "relative",
-        }}
-      >
-        {panels.map((p: Panel) => {
-          return (
-            <PanelComponent
-              key={p.id}
-              id={p.id}
-              x={p.x}
-              y={p.y}
-              assign={assignPanel}
-              movables={allies.filter(m => m.mappableId == p.id)}
-              currentPlayer={currentPlayer}
-              actionSelected={actionSelected}
-              doActionSelected={doActionSelected}
-            />
-          );
-        })}
-        {/*allies.map((c: Character) => {
+      <div className="grid-container">
+        <div className="turn-container">
+          {allies.concat(enemies).map((c) => {
+            return (
+              <div
+                key={c.id}
+                style={currentPlayer === c.id ? { color: "green" } : {}}
+              >
+                {c.name}
+              </div>
+            );
+          })}
+        </div>
+        <div
+          className="grid"
+          style={{
+            gridTemplateColumns: `repeat(${columns}, 1fr)`,
+            gridTemplateRows: `repeat(${rows}, 1fr)`,
+            position: "relative",
+          }}
+        >
+          {panels.map((p: Panel) => {
+            return (
+              <PanelComponent
+                key={p.id}
+                id={p.id}
+                x={p.x}
+                y={p.y}
+                assign={assignPanel}
+                movables={allies.filter((m) => m.mappableId == p.id)}
+                currentPlayer={currentPlayer}
+                actionSelected={actionSelected}
+                doActionSelected={doActionSelected}
+              />
+            );
+          })}
+          {/*allies.map((c: Character) => {
           return (
             <div
               className={"grid__panel"+(actionSelected!==null ? " selection" : "")}
@@ -169,35 +166,40 @@ const VersusGrid = ({ setMessage, rows, columns }: Props) => {
             </div>
           );
         })*/}
+        </div>
+        <div
+          className="grid"
+          style={{
+            gridTemplateColumns: `repeat(${columns}, 1fr)`,
+            gridTemplateRows: `repeat(${rows}, 1fr)`,
+            position: "relative",
+          }}
+        >
+          {enemies.map((c: Character) => {
+            return (
+              <div
+                className={
+                  "grid__panel" + (actionSelected !== null ? " selection" : "")
+                }
+                style={
+                  currentPlayer === c.id ? { border: "3px solid green" } : {}
+                }
+                onClick={doActionSelected(c.id)}
+              >
+                <CharacterComponent
+                  c={c}
+                  currentPlayer={currentPlayer}
+                  doActionSelected={doActionSelected}
+                />
+              </div>
+            );
+          })}
+        </div>
       </div>
-      <div
-        className="grid"
-        style={{
-          gridTemplateColumns: `repeat(${columns}, 1fr)`,
-          gridTemplateRows: `repeat(${rows}, 1fr)`,
-          position: "relative",
-        }}
-      >
-        {enemies.map((c: Character) => {
-          return (
-            <div
-              className={"grid__panel"+(actionSelected!==null ? " selection" : "")}
-              style={
-                currentPlayer === c.id ? { border: "3px solid green" } : {}
-              }
-              onClick={doActionSelected(c.id)}
-            >
-              <CharacterComponent
-                c={c}
-                currentPlayer={currentPlayer}
-                doActionSelected={doActionSelected}
-              />
-            </div>
-          );
-        })}
-      </div>
-      </div>
-      <Menu setActionSelected={setActionSelected} actionSelected={actionSelected}/>
+      <Menu
+        setActionSelected={setActionSelected}
+        actionSelected={actionSelected}
+      />
     </div>
   );
 };

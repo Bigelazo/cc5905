@@ -3,7 +3,7 @@ html {
   padding-left: 2rem;
   padding-right: 2rem;
   padding-bottom: 1rem;
-  font-family: 'DeluxePaint Comic';
+  font-family: 'Terraria';
 }
 
 @font-face {
@@ -14,6 +14,11 @@ html {
 @font-face {
   font-family: 'DeluxePaint Comic';
   src: url('/public/font/dpcomic.ttf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Terraria';
+  src: url('/public/font/terraria.ttf') format('opentype');
 }
 
 .main-container {
