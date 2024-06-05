@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game HUD</title>
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+        }
+        .hud {
+            display: flex;
+            flex-direction: column;
+            background-color: #1a1a6d;
+            border: 2px solid #000;
+            width: 300px;
+            padding: 10px;
+        }
+        .hud-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        .hud-item:last-child {
+            margin-bottom: 0;
+        }
+        .name {
+            font-weight: bold;
+            color: yellow;
+        }
+        .value {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="hud">
+        <div class="hud-item">
+            <div class="name">????????</div>
+            <div class="value">63</div>
+        </div>
+        <div class="hud-item">
+            <div class="name">WEDGE</div>
+            <div class="value">68</div>
+        </div>
+        <div class="hud-item">
+            <div class="name">BIGGS</div>
+            <div class="value">70</div>
+        </div>
+    </div>
+</body>
+</html>
