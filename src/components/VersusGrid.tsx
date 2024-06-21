@@ -19,15 +19,9 @@ const VersusGrid = ({ setMessage, rows, columns }: Props) => {
   const [allies, setAllies] = useState<Character[]>([]);
   const [enemies, setEnemies] = useState<Character[]>([]);
   const [currentPlayer, setCurrentPlayer] = useState<number | null>(null);
-
   const [actionSelected, setActionSelected] = useState<number | null>(null);
-
-  const isCurrentPlayerAlly =
-    allies.find((c) => c.id === currentPlayer) != null;
-
   const [panels, setPanels] = useState<Panel[]>([]);
-
-  const winCondition = useRef([]);
+  const [enemyPanels, setEnemyPanels] = useState<Panel[]>([]);
 
   const loadGameData = () => {
     axios.get(`${host}/`).then((response: any) => {
@@ -42,20 +36,19 @@ const VersusGrid = ({ setMessage, rows, columns }: Props) => {
         }
       );
       const currentCharacter = response.data.currentCharacter;
-      /*const panels: Panel[] = [];
-      for(let r=0; r<rows; r++){
-        for(let c=0; c<columns; c++){
-          panels[]
-        }
-      }*/
-      const panels: Panel[] = response.data.panels.map((p: any) => {
+      const allyPanels: Panel[] = response.data.panels.allies.map((p: any) => {
         return new Panel(p.id, p.x, p.y);
       });
+      const enemyPanels: Panel[] = response.data.panels.enemies.map(
+        (p: any) => {
+          return new Panel(p.id, p.x, p.y);
+        }
+      );
 
       setAllies(allies);
       setEnemies(enemies);
       setCurrentPlayer(currentCharacter);
-      setPanels(panels);
+      setPanels(allyPanels);
       setGameStatus(response.data.gameStatus);
     });
   };
@@ -67,9 +60,10 @@ const VersusGrid = ({ setMessage, rows, columns }: Props) => {
   useEffect(() => {}, [actionSelected]);
 
   const assignPanel = (cId: number, pId: number) => {
-    axios
-      .post(`${host}/assign/${cId}/${pId}`)
-      .then((response) => console.log(response));
+    axios.post(`${host}/assign/${cId}/${pId}`).then((response) => {
+      setMessage(response.data.message);
+      loadCharacters();
+    });
   };
 
   const loadCharacters = () => {
@@ -105,8 +99,11 @@ const VersusGrid = ({ setMessage, rows, columns }: Props) => {
   };
 
   const doActionSelected = (toId: number) => () => {
+    console.log("algo");
     if (actionSelected === 1) {
       attack(toId);
+    } else if (actionSelected === 2) {
+      assignPanel(currentPlayer == null ? 0 : currentPlayer, toId);
     }
     setActionSelected(null);
   };
@@ -149,23 +146,6 @@ const VersusGrid = ({ setMessage, rows, columns }: Props) => {
               />
             );
           })}
-          {/*allies.map((c: Character) => {
-          return (
-            <div
-              className={"grid__panel"+(actionSelected!==null ? " selection" : "")}
-              style={
-                currentPlayer === c.id ? { border: "3px solid green" } : {}
-              }
-              onClick={doActionSelected(c.id)}
-            >
-              <CharacterComponent
-                c={c}
-                attack={attack}
-                currentPlayer={currentPlayer}
-              />
-            </div>
-          );
-        })*/}
         </div>
         <div
           className="grid"
@@ -200,57 +180,11 @@ const VersusGrid = ({ setMessage, rows, columns }: Props) => {
         setActionSelected={setActionSelected}
         actionSelected={actionSelected}
       />
+      <button onClick={() => axios.get(`${host}/reset`).then(loadGameData)}>
+        Reset
+      </button>
     </div>
   );
 };
 
 export default VersusGrid;
-
-/* 
-  const loadCharacters = () => {
-    axios.get(`${host}/character`).then((response: any) => {
-      const characters: Character[] = response.data.characters.map((c: any) => {
-        return new Character(c.id, c.name, c.hp, c.attack);
-      });
-      setAllies(characters.slice(0, 4));
-      setEnemies(characters.slice(4, 9));
-      setCurrentPlayer(response.data.currentCharacter);
-      console.log(response.data);
-    });
-  };
-
-  const loadPanels = () => {
-    axios.get(`${host}/panel`).then((response: any) => {
-      const panels: Panel[] = response.data.panels.map((p: any) => {
-        return new Panel(p.id, p.x, p.y);
-      });
-      setPanels(panels);
-      console.log(response.data);
-    });
-  };
-*/
-
-/*
-        {panels.map((p: Panel) => {
-          return (
-            <PanelComponent
-              key={p.id}
-              id={p.id}
-              x={p.x}
-              y={p.y}
-              assign={assignPanel}
-            >
-              {allies.map((c: Character) => {
-                return (
-                  <CharacterComponent
-                    key={allies[0].id}
-                    c={allies[0]}
-                    attack={attack}
-                    currentPlayer={currentPlayer}
-                  />
-                );
-              })}
-            </PanelComponent>
-          );
-        })}
-*/

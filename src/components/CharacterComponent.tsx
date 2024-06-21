@@ -9,13 +9,36 @@ interface Props {
 }
 
 const CharacterComponent = ({ c, currentPlayer, doActionSelected }: Props) => {
-  
+  const [show, setShow] = useState(false);
+
   return (
-    <div style={currentPlayer == c.id?{color: "yellow"}:{}} onClick={doActionSelected(c.id)}>
-      <div>{c.name}</div>
-      <div>Hp: {c.hp}</div>
-      <div>Atk: {c.atk}</div>
-    </div>
+    <>
+      <div
+        onMouseEnter={() => setShow(true)}
+        onMouseLeave={() => setShow(false)}
+        style={currentPlayer == c.id ? { color: "yellow" } : {}}
+        onClick={(e) => {
+          e.stopPropagation();
+          doActionSelected(c.id)();
+        }}
+      >
+        {c.name}
+      </div>
+      {show && (
+        <div
+          style={{
+            position: "absolute",
+            backgroundColor: "#555",
+            padding: "8px",
+            borderRadius: "5px",
+          }}
+        >
+          <div>Name: {c.name}</div>
+          <div>Health points: {c.hp}</div>
+          <div>Attack damage: {c.atk}</div>
+        </div>
+      )}
+    </>
   );
 };
 
