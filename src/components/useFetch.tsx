@@ -45,11 +45,21 @@ export const useFetchGameData = () => {
 
   const response: [
     Character[],
+    React.Dispatch<React.SetStateAction<Character[]>>,
     Character[],
+    React.Dispatch<React.SetStateAction<Character[]>>,
     number | null,
     number | null,
     Panel[]
-  ] = [allies, enemies, currentPlayer, actionSelected, panels];
+  ] = [
+    allies,
+    setAllies,
+    enemies,
+    setEnemies,
+    currentPlayer,
+    actionSelected,
+    panels,
+  ];
 
   return response;
 };

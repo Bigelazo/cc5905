@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "../styles/menu.css";
-import BigelButton from "./BigelButton";
+import Button from "./Button";
+import { ActionSelectedContext } from "./context";
 
-interface Props {
-  setActionSelected: (action: number) => void;
-  actionSelected: number | null;
-}
+const Menu = () => {
+  console.log("Rendering Menu");
 
-const Menu = ({ setActionSelected, actionSelected }: Props) => {
+  const { actionSelected, setActionSelected } = useContext(
+    ActionSelectedContext
+  );
+
   return (
     <div className="menu-container">
       <div className="left-info">
@@ -25,24 +27,24 @@ const Menu = ({ setActionSelected, actionSelected }: Props) => {
         </div>
       </div>
       <div className="action-selection">
-        <BigelButton
+        <Button
           onClick={() => setActionSelected(1)}
           selected={actionSelected == 1}
         >
           Attack
-        </BigelButton>
-        <BigelButton
+        </Button>
+        <Button
           onClick={() => setActionSelected(2)}
           selected={actionSelected == 2}
         >
           Move
-        </BigelButton>
-        <BigelButton
+        </Button>
+        <Button
           onClick={() => setActionSelected(3)}
           selected={actionSelected == 3}
         >
           Fireball
-        </BigelButton>
+        </Button>
       </div>
       <div className="right-info">
         <div className="headers">

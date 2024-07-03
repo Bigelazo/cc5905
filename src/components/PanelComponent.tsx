@@ -1,69 +1,54 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useContext, useState } from "react";
 import CharacterComponent from "./CharacterComponent";
 import Character from "../model/Character";
 import Panel from "../model/Panel";
-import { Button } from "@mui/material";
+import { ActionSelectedContext, CurrentUnitContext } from "./context";
+import axios from "axios";
 
 interface Props {
-  id: number;
-  x: number;
-  y: number;
-  assign: (p: number, c: number) => void;
-  movables: Character[];
-  currentPlayer: number | null;
-  doActionSelected: (c: number) => () => void;
-  actionSelected: number | null;
+  p: Panel;
+  units: Character[];
+  setMessage: (s: string) => void;
 }
 
-const PanelComponent = ({
-  id,
-  x,
-  y,
-  movables,
-  currentPlayer,
-  actionSelected,
-  doActionSelected,
-  assign,
-}: Props) => {
-  const [show, setShow] = useState(false);
+const PanelComponent = ({ p, units, setMessage }: Props) => {
+  console.log("Rendering Panel " + p.id);
+
+  const { currentUnit, setCurrentUnit } = useContext(CurrentUnitContext);
+  const { actionSelected, setActionSelected } = useContext(
+    ActionSelectedContext
+  );
+
+  const ids = units.map((u) => u.id);
+
+  const receiveMovingUnit = () => {
+    axios
+      .post("http://localhost:8080/assign/" + currentUnit + "/" + p.id)
+      .then((response) => {
+        setCurrentUnit(response.data.currentUnit);
+        console.log(response.data);
+        setMessage(currentUnit + " moved to panel id " + p.id);
+        setActionSelected(-1);
+      });
+  };
 
   return (
     <div
-      onMouseEnter={() => setShow(true)}
-      onMouseLeave={() => setShow(false)}
+      onClick={actionSelected === 2 ? () => receiveMovingUnit() : () => {}}
       style={
-        false
-          ? { gridColumnStart: x, gridRowStart: y, border: "3px solid green" }
-          : { gridColumnStart: x, gridRowStart: y }
+        ids.includes(currentUnit)
+          ? {
+              gridColumnStart: p.x,
+              gridRowStart: p.y,
+              border: "3px solid green",
+            }
+          : { gridColumnStart: p.x, gridRowStart: p.y }
       }
-      className={"grid__panel" + (actionSelected !== null ? " selection" : "")}
-      onClick={doActionSelected(id)}
+      className={"grid__panel" + (0 !== null ? " selection" : "")}
     >
-      {movables.map((c: Character) => {
-        return (
-          <CharacterComponent
-            key={c.id}
-            c={c}
-            currentPlayer={currentPlayer}
-            doActionSelected={doActionSelected}
-          />
-        );
+      {units.map((c: Character) => {
+        return <CharacterComponent key={c.id} c={c} setMessage={setMessage} />;
       })}
-      {show && (
-        <div
-          style={{
-            position: "absolute",
-            backgroundColor: "#555",
-            padding: "8px",
-            borderRadius: "5px",
-          }}
-        >
-          <div>ID: {id}</div>
-          <div>
-            Coordenadas: ({x},{y})
-          </div>
-        </div>
-      )}
     </div>
   );
 };
