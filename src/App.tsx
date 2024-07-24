@@ -20,8 +20,9 @@ const App = () => {
     <div className="main-container">
       <div className="info-container">{message}</div>
       <ActionSelectedProvider>
-        <div className="grid-container">
-          {/* <div className="turn-container">
+        <CurrentUnitProvider>
+          <div className="grid-container">
+            {/* <div className="turn-container">
           {allies.concat(enemies).map((c) => {
             return (
               <div
@@ -33,13 +34,12 @@ const App = () => {
             );
           })}
         </div> */}
-          <CurrentUnitProvider>
             <Grid playerId={1} size={[3, 3]} setMessage={setMessage} />
             <Grid playerId={2} size={[3, 3]} setMessage={setMessage} />
-          </CurrentUnitProvider>
-          {/* <Menu /> Con este sí funcionan los clicks, providers distintos tienen distintos estados*/}
-        </div>
-        <Menu />
+            {/* <Menu /> Con este sí funcionan los clicks, providers distintos tienen distintos estados*/}
+          </div>
+          <Menu />
+        </CurrentUnitProvider>
       </ActionSelectedProvider>
       <button onClick={() => axios.get(`${host}/reset`)}>Reset</button>
     </div>

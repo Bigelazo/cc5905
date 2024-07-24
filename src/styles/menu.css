@@ -37,8 +37,8 @@
 
 /* inside unit-info */
 .headers {
-  display: flex;
-  justify-content: space-evenly;
+  align-items: center;
+  justify-content: center;
 }
 
 /* inside unit-info */
@@ -46,11 +46,13 @@
   display: flex;
   justify-content: space-evenly;
 }
+
 .action-selection {
   display: flex;
   flex-direction: column;
   height: 100%;
 }
+
 .action-selection .bigel-button{
   flex: 1;
   width: 100%;

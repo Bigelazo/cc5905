@@ -23,11 +23,12 @@ const PanelComponent = ({ p, units, setMessage }: Props) => {
 
   const receiveMovingUnit = () => {
     axios
-      .post("http://localhost:8080/assign/" + currentUnit + "/" + p.id)
+      .post(
+        `http://localhost:8080/execute-action/${actionSelected}/${currentUnit}/${p.id}`
+      )
       .then((response) => {
         setCurrentUnit(response.data.currentUnit);
-        console.log(response.data);
-        setMessage(currentUnit + " moved to panel id " + p.id);
+        setMessage(response.data.message);
         setActionSelected(-1);
       });
   };
@@ -40,7 +41,7 @@ const PanelComponent = ({ p, units, setMessage }: Props) => {
           ? {
               gridColumnStart: p.x,
               gridRowStart: p.y,
-              border: "3px solid green",
+              backgroundColor: "yellow",
             }
           : { gridColumnStart: p.x, gridRowStart: p.y }
       }

@@ -19,12 +19,19 @@ export const useFetchGameData = () => {
     axios.get(`${host}/`).then((response: any) => {
       const allies: Character[] = response.data.parties[0].characters.map(
         (c: any) => {
-          return new Character(c.id, c.name, c.hp, c.attack, c.mappableId);
+          return new Character(
+            c.id,
+            c.name,
+            c.hp,
+            c.attack,
+            c.img,
+            c.mappableId
+          );
         }
       );
       const enemies: Character[] = response.data.parties[1].characters.map(
         (c: any) => {
-          return new Character(c.id, c.name, c.hp, c.attack, null);
+          return new Character(c.id, c.name, c.hp, c.attack, c.img, null);
         }
       );
       const currentCharacter = response.data.currentCharacter;

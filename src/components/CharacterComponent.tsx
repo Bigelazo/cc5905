@@ -19,33 +19,33 @@ const CharacterComponent = ({ c, setMessage }: Props) => {
     ActionSelectedContext
   );
 
-  const receiveDamage = (
+  const receiveAction = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     event.stopPropagation();
     axios
-      .post("http://localhost:8080/attack/" + currentUnit + "/" + c.id)
+      .post(
+        `http://localhost:8080/execute-action/${actionSelected}/${currentUnit}/${c.id}`
+      )
       .then((response) => {
         setCurrentUnit(response.data.currentUnit);
-        setMessage(currentUnit + " attacked " + c.name);
+        setMessage(response.data.message);
         setActionSelected(-1);
       });
   };
 
   return (
     <>
-      <div
+      <img
         onMouseEnter={() => setShow(true)}
         onMouseLeave={() => setShow(false)}
-        onClick={actionSelected === 1 ? (e) => receiveDamage(e) : () => {}}
-        style={
-          currentUnit == c.id
-            ? { color: "yellow", border: "1px solid" }
-            : { border: "1px solid" }
+        onClick={
+          actionSelected != 2 && actionSelected != -1
+            ? (e) => receiveAction(e)
+            : () => {}
         }
-      >
-        {c.name}
-      </div>
+        src={`http://localhost:8080/static/resource/${c.img}`}
+      ></img>
       {show && (
         <div
           style={{
@@ -53,6 +53,7 @@ const CharacterComponent = ({ c, setMessage }: Props) => {
             backgroundColor: "#555",
             padding: "8px",
             borderRadius: "5px",
+            top: "0",
           }}
         >
           <div>Name: {c.name}</div>

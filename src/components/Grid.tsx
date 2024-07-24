@@ -24,7 +24,7 @@ const Grid = ({ playerId, size, setMessage }: Props) => {
     axios.get("http://localhost:8080/grid/" + playerId).then((response) => {
       const data = response.data;
       const units: Character[] = data.units.map((c: any) => {
-        return new Character(c.id, c.name, c.hp, c.attack, c.mappableId);
+        return new Character(c.id, c.name, c.hp, c.attack, c.img, c.mappableId);
       });
       const panels: Panel[] = data.panels.map((p: any) => {
         return new Panel(p.id, p.x, p.y);
