@@ -24,10 +24,16 @@ const Grid = ({ playerId, size, setMessage }: Props) => {
     axios.get("http://localhost:8080/grid/" + playerId).then((response) => {
       const data = response.data;
       const units: Character[] = data.units.map((c: any) => {
-        return new Character(c.id, c.name, c.hp, c.attack, c.img, c.mappableId);
+        return new Character(
+          c.id,
+          c.unit.name,
+          c.unit.hp,
+          c.unit.attack,
+          c.unit.img
+        );
       });
       const panels: Panel[] = data.panels.map((p: any) => {
-        return new Panel(p.id, p.x, p.y);
+        return new Panel(p.id, p.panel.x, p.panel.y);
       });
 
       setUnits(units);
@@ -53,7 +59,7 @@ const Grid = ({ playerId, size, setMessage }: Props) => {
           <PanelComponent
             key={p.id}
             p={p}
-            units={units.filter((u) => u.mappableId == p.id)}
+            units={units}
             setMessage={setMessage}
           />
         );

@@ -24,7 +24,7 @@ const Menu = () => {
     axios.get("http://localhost:8080/grid/" + playerId).then((response) => {
       const data = response.data;
       const units: Character[] = data.units.map((c: any) => {
-        return new Character(c.id, c.name, c.hp, c.attack, c.img, c.mappableId);
+        return new Character(c.id, c.name, c.hp, c.attack, c.img);
       });
       setUnits(units);
     });
@@ -34,7 +34,7 @@ const Menu = () => {
     axios.get("http://localhost:8080/grid/" + enemyId).then((response) => {
       const data = response.data;
       const units: Character[] = data.units.map((c: any) => {
-        return new Character(c.id, c.name, c.hp, c.attack, c.img, c.mappableId);
+        return new Character(c.id, c.name, c.hp, c.attack, c.img);
       });
       setUnits2(units);
     });
