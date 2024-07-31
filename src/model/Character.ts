@@ -7,6 +7,7 @@ class Character {
   isDefeated: boolean;
   mappableId: number | null;
 
+
   constructor(id: number, name: string, hp: number, atk: number, img: string, mappableId: number | null) {
     this.id = id;
     this.name = name;

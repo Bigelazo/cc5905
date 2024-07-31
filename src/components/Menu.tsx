@@ -5,6 +5,25 @@ import { ActionSelectedContext, CurrentUnitContext } from "./context";
 import Character from "../model/Character";
 import axios from "axios";
 
+
+const UnitList = ({ units }: { units: Character[] }) => {
+  return (
+    <div className="queue-info">
+        {units.map((c: Character, i) => {
+          return (<><div className="info">
+            <div className="info-name">
+              {c.name}
+            </div>
+            <div className="info-others">
+              <label className="info-label">HP</label> {c.hp}/999
+            </div>
+          </div>
+          {/*i<units.length-1?<div className="info-separator"/>:null*/}
+          </>)
+        })}
+      </div>
+  );
+}
 const Menu = () => {
   console.log("Rendering Menu");
 
@@ -100,26 +119,12 @@ const Menu = () => {
     showCurrentUnitActions();
   }, [currentUnit]);
 
+  //TODO: fix queue
+  const queue = units.concat(units2);
+
   return (
     <div className="menu-container">
-      <div className="left-info">
-        <div className="info">
-          <div style={{ color: "black" }}>
-            <p>NAME</p>
-            <p>HP</p>
-            <p>ATK</p>
-          </div>
-          {units.map((c: Character) => {
-            return (
-              <div className="headers" style={{ border: "1px solid black" }}>
-                <p>{c.name}</p>
-                <p>{c.hp}</p>
-                <p>{c.atk}</p>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+      <UnitList units={units} />
       <div className="action-selection">
         {Object.entries(actions).map(([actionName, actionId]) => {
           return (
@@ -136,24 +141,7 @@ const Menu = () => {
           );
         })}
       </div>
-      <div className="right-info">
-        <div className="info">
-          <div style={{ color: "black" }}>
-            <p>NAME</p>
-            <p>HP</p>
-            <p>ATK</p>
-          </div>
-          {units2.map((c: Character) => {
-            return (
-              <div className="headers" style={{ border: "1px solid black" }}>
-                <p>{c.name}</p>
-                <p>{c.hp}</p>
-                <p>{c.atk}</p>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+      <UnitList units={units2} />
     </div>
   );
 };
