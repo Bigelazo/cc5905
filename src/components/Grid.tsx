@@ -4,10 +4,10 @@ import Panel from "../model/Panel";
 import PanelComponent from "./PanelComponent";
 import "../styles/grid.css";
 import axios from "axios";
-import { CurrentUnitContext } from "./context";
+import { ActionSelectedContext, CurrentUnitContext } from "./context";
 
 interface Props {
-  playerId: number;
+  playerId: string;
   size: [number, number];
   setMessage: (s: string) => void;
 }
@@ -19,6 +19,9 @@ const Grid = ({ playerId, size, setMessage }: Props) => {
   const [panels, setPanels] = useState<Panel[]>([]);
 
   const { currentUnit, setCurrentUnit } = useContext(CurrentUnitContext);
+  const { actionSelected, setActionSelected } = useContext(
+    ActionSelectedContext
+  );
 
   const loadGridData = () => {
     axios.get("http://localhost:8080/grid/" + playerId).then((response) => {
@@ -39,6 +42,18 @@ const Grid = ({ playerId, size, setMessage }: Props) => {
     loadGridData();
   }, [currentUnit]);
 
+  const receiveAction = (id: string) => {
+    axios
+      .post(
+        `http://localhost:8080/execute-action/${actionSelected}/${currentUnit}/${id}`
+      )
+      .then((response) => {
+        setCurrentUnit(response.data.currentUnit);
+        setMessage(response.data.message);
+        setActionSelected(-1);
+      });
+  };
+
   return (
     <div
       className="grid"
@@ -55,6 +70,7 @@ const Grid = ({ playerId, size, setMessage }: Props) => {
             p={p}
             units={units.filter((u) => u.mappableId == p.id)}
             setMessage={setMessage}
+            handleClick={receiveAction}
           />
         );
       })}

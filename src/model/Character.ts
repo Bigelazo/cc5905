@@ -1,14 +1,13 @@
 class Character {
-  id: number;
+  id: string;
   name: string;
   hp: number;
   atk: number;
   img: string;
   isDefeated: boolean;
-  mappableId: number | null;
+  mappableId: string | null;
 
-
-  constructor(id: number, name: string, hp: number, atk: number, img: string, mappableId: number | null) {
+  constructor(id: string, name: string, hp: number, atk: number, img: string, mappableId: string | null) {
     this.id = id;
     this.name = name;
     this.hp = hp;

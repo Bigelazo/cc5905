@@ -6,66 +6,23 @@ import Panel from "../model/Panel";
 const host = "http://localhost:8080";
 
 export const useFetchGameData = () => {
-  const [allies, setAllies] = useState<Character[]>([]);
-  const [enemies, setEnemies] = useState<Character[]>([]);
-  const [currentPlayer, setCurrentPlayer] = useState<number | null>(null);
-  const [actionSelected, setActionSelected] = useState<number | null>(null);
-  const [panels, setPanels] = useState<Panel[]>([]);
+  const [playerIds, setPlayerIds] = useState<string[]>([]);
 
-  const isCurrentPlayerAlly =
-    allies.find((c) => c.id === currentPlayer) != null;
-
-  const loadGameData = () => {
-    axios.get(`${host}/`).then((response: any) => {
-      const allies: Character[] = response.data.parties[0].characters.map(
-        (c: any) => {
-          return new Character(
-            c.id,
-            c.name,
-            c.hp,
-            c.attack,
-            c.img,
-            c.mappableId
-          );
-        }
-      );
-      const enemies: Character[] = response.data.parties[1].characters.map(
-        (c: any) => {
-          return new Character(c.id, c.name, c.hp, c.attack, c.img, null);
-        }
-      );
-      const currentCharacter = response.data.currentCharacter;
-      const panels: Panel[] = response.data.panels.map((p: any) => {
-        return new Panel(p.id, p.x, p.y);
-      });
-
-      setAllies(allies);
-      setEnemies(enemies);
-      setCurrentPlayer(currentCharacter);
-      setPanels(panels);
+  const fetchGameData = () => {
+    axios.get(`${host}/start`).then((response) => {
+      const players = response.data.parties;
+      const playerIds = players.map((p: any) => p.id);
+      setPlayerIds(playerIds);
     });
   };
 
   useEffect(() => {
-    loadGameData();
+    fetchGameData();
   }, []);
 
-  const response: [
-    Character[],
-    React.Dispatch<React.SetStateAction<Character[]>>,
-    Character[],
-    React.Dispatch<React.SetStateAction<Character[]>>,
-    number | null,
-    number | null,
-    Panel[]
-  ] = [
-    allies,
-    setAllies,
-    enemies,
-    setEnemies,
-    currentPlayer,
-    actionSelected,
-    panels,
+  const response: [string[], React.Dispatch<React.SetStateAction<string[]>>] = [
+    playerIds,
+    setPlayerIds,
   ];
 
   return response;

@@ -9,9 +9,10 @@ interface Props {
   p: Panel;
   units: Character[];
   setMessage: (s: string) => void;
+  handleClick: (id: string) => void;
 }
 
-const PanelComponent = ({ p, units, setMessage }: Props) => {
+const PanelComponent = ({ p, units, setMessage, handleClick }: Props) => {
   console.log("Rendering Panel " + p.id);
 
   const { currentUnit, setCurrentUnit } = useContext(CurrentUnitContext);
@@ -21,21 +22,15 @@ const PanelComponent = ({ p, units, setMessage }: Props) => {
 
   const ids = units.map((u) => u.id);
 
-  const receiveMovingUnit = () => {
-    axios
-      .post(
-        `http://localhost:8080/execute-action/${actionSelected}/${currentUnit}/${p.id}`
-      )
-      .then((response) => {
-        setCurrentUnit(response.data.currentUnit);
-        setMessage(response.data.message);
-        setActionSelected(-1);
-      });
-  };
-
   return (
     <div
-      onClick={actionSelected === 2 ? () => receiveMovingUnit() : () => {}}
+      onClick={
+        actionSelected == 2
+          ? () => {
+              handleClick(p.id);
+            }
+          : () => {}
+      }
       style={
         ids.includes(currentUnit)
           ? {
@@ -48,7 +43,14 @@ const PanelComponent = ({ p, units, setMessage }: Props) => {
       className={"grid__panel" + (0 !== null ? " selection" : "")}
     >
       {units.map((c: Character) => {
-        return <CharacterComponent key={c.id} c={c} setMessage={setMessage} />;
+        return (
+          <CharacterComponent
+            key={c.id}
+            c={c}
+            setMessage={setMessage}
+            handleClick={handleClick}
+          />
+        );
       })}
     </div>
   );

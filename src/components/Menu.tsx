@@ -5,26 +5,31 @@ import { ActionSelectedContext, CurrentUnitContext } from "./context";
 import Character from "../model/Character";
 import axios from "axios";
 
-
 const UnitList = ({ units }: { units: Character[] }) => {
   return (
     <div className="queue-info">
-        {units.map((c: Character, i) => {
-          return (<><div className="info">
-            <div className="info-name">
-              {c.name}
+      {units.map((c: Character, i) => {
+        return (
+          <>
+            <div className="info">
+              <div className="info-name">{c.name}</div>
+              <div className="info-others">
+                <label className="info-label">HP</label> {c.hp}/999
+              </div>
             </div>
-            <div className="info-others">
-              <label className="info-label">HP</label> {c.hp}/999
-            </div>
-          </div>
-          {/*i<units.length-1?<div className="info-separator"/>:null*/}
-          </>)
-        })}
-      </div>
+            {/*i<units.length-1?<div className="info-separator"/>:null*/}
+          </>
+        );
+      })}
+    </div>
   );
+};
+
+interface Props {
+  playerIds: string[];
 }
-const Menu = () => {
+
+const Menu = ({ playerIds }: Props) => {
   console.log("Rendering Menu");
 
   const { actionSelected, setActionSelected } = useContext(
@@ -36,11 +41,8 @@ const Menu = () => {
   const [units, setUnits] = useState<Character[]>([]);
   const [units2, setUnits2] = useState<Character[]>([]);
 
-  const playerId: number = 1;
-  const enemyId: number = 2;
-
   const loadGridData = () => {
-    axios.get("http://localhost:8080/grid/" + playerId).then((response) => {
+    axios.get("http://localhost:8080/grid/" + playerIds[0]).then((response) => {
       const data = response.data;
       const units: Character[] = data.units.map((c: any) => {
         return new Character(c.id, c.name, c.hp, c.attack, c.img, c.mappableId);
@@ -50,7 +52,7 @@ const Menu = () => {
   };
 
   const loadGridData2 = () => {
-    axios.get("http://localhost:8080/grid/" + enemyId).then((response) => {
+    axios.get("http://localhost:8080/grid/" + playerIds[1]).then((response) => {
       const data = response.data;
       const units: Character[] = data.units.map((c: any) => {
         return new Character(c.id, c.name, c.hp, c.attack, c.img, c.mappableId);
@@ -118,9 +120,6 @@ const Menu = () => {
   useEffect(() => {
     showCurrentUnitActions();
   }, [currentUnit]);
-
-  //TODO: fix queue
-  const queue = units.concat(units2);
 
   return (
     <div className="menu-container">

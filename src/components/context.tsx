@@ -1,13 +1,14 @@
+import axios from "axios";
 import { ReactNode, createContext, useContext, useState } from "react";
 
 interface CurrentUnitProps {
-  currentUnit: number;
-  setCurrentUnit: (n: number) => void;
+  currentUnit: string;
+  setCurrentUnit: (s: string) => void;
 }
 
 export const CurrentUnitContext = createContext<CurrentUnitProps>({
-  currentUnit: 0,
-  setCurrentUnit: (n) => {},
+  currentUnit: "",
+  setCurrentUnit: (s) => {},
 });
 
 interface ActionSelectedProps {
@@ -25,7 +26,12 @@ interface ProviderProps {
 }
 
 export const CurrentUnitProvider = ({ children }: ProviderProps) => {
-  const [currentUnit, setCurrentUnit] = useState(1);
+  console.log("Rendering CurrentUnitProvider");
+  const [currentUnit, setCurrentUnit] = useState("");
+
+  axios.get("http://localhost:8080/start").then((response) => {
+    setCurrentUnit(response.data.currentUnit);
+  });
 
   return (
     <CurrentUnitContext.Provider value={{ currentUnit, setCurrentUnit }}>
