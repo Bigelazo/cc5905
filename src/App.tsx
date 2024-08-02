@@ -42,6 +42,17 @@ const App = () => {
     setActionSelected,
   } = useFetchGameData();
 
+  /*
+  const {
+    loading,
+    players,
+    currentUnit,
+    setCurrentUnit,
+    actionSelected,
+    setActionSelected,
+  } = useFetchNewGameData();
+   */
+
   //const units = players.map((p) => p.units).flat();
 
   const receiveAction = (id: string) => {
