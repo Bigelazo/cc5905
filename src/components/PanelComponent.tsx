@@ -1,7 +1,7 @@
 import CharacterComponent from "./CharacterComponent";
 import Character from "../model/Character";
 import Panel from "../model/Panel";
-
+import {motion} from "framer-motion";
 interface Props {
   currentUnit: string;
   actionSelected: number;
@@ -41,12 +41,17 @@ const PanelComponent = ({
     >
       {units.map((c: Character) => {
         return (
-          <CharacterComponent
-            key={c.id}
-            actionSelected={actionSelected}
-            c={c}
-            handleClick={handleClick}
-          />
+          <motion.div
+          animate={{x: 10, y: 20}}
+          transition={{type: "spring"}}
+          >
+            <CharacterComponent
+              key={c.id}
+              actionSelected={actionSelected}
+              c={c}
+              handleClick={handleClick}
+            />
+          </motion.div>
         );
       })}
     </div>

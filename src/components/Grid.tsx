@@ -21,6 +21,7 @@ const Grid = ({
 }: Props) => {
   const { units, panels } = useFetchGridData(playerId, currentUnit);
 
+  //const units = p.storage
   return (
     <div
       className="grid"

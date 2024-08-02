@@ -67,6 +67,7 @@ interface FetchGridDataProps {
 }
 
 export const useFetchGridData = (playerId: string, currentUnit: string) => {
+  console.log('asd')
   const [units, setUnits] = useState<Character[]>([]);
   const [panels, setPanels] = useState<Panel[]>([]);
 
