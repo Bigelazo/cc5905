@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Character from "../model/Character";
 import Panel from "../model/Panel";
+import Player from "../model/Player";
 
 interface FetchGameDataProps {
   loading: boolean;
@@ -76,7 +77,17 @@ export const useFetchGridData = (playerId: string, currentUnit: string) => {
         return new Character(c.id, c.name, c.hp, c.attack, c.img, c.mappableId);
       });
       const panels: Panel[] = data.panels.map((p: any) => {
-        return new Panel(p.id, p.x, p.y);
+        const panelUnits = p.storage.map((c: any) => {
+          return new Character(
+            c.id,
+            c.name,
+            c.hp,
+            c.attack,
+            c.img,
+            c.mappableId
+          );
+        });
+        return new Panel(p.id, p.x, p.y, panelUnits);
       });
 
       setUnits(units);
@@ -91,6 +102,69 @@ export const useFetchGridData = (playerId: string, currentUnit: string) => {
   const response: FetchGridDataProps = {
     units,
     panels,
+  };
+
+  return response;
+};
+
+interface FetchNewGameDataProps {
+  loading: boolean;
+  players: Player[];
+  currentUnit: string;
+  setCurrentUnit: (currentUnit: string) => void;
+  actionSelected: number;
+  setActionSelected: (actionSelected: number) => void;
+}
+
+export const useFetchNewGameData = () => {
+  const [loading, setLoading] = useState<boolean>(true);
+  const [players, setPlayers] = useState<Player[]>([]);
+  const [currentUnit, setCurrentUnit] = useState<string>("");
+  const [actionSelected, setActionSelected] = useState<number>(-1);
+
+  const fetchNewGameData = () => {
+    axios.get(`${HOST}/start`).then((response) => {
+      const playerData = response.data.parties;
+      const currentUnit = response.data.currentUnit;
+      setCurrentUnit(currentUnit);
+
+      const players: Player[] = playerData.map((player: any) => {
+        let units: Character[] = [];
+        const panels: Panel[] = player.panels.map((panel: any) => {
+          const panelUnits: Character[] = panel.storage.map((c: any) => {
+            if (c != null || c != undefined) {
+              const unit = new Character(
+                c.id,
+                c.name,
+                c.hp,
+                c.attack,
+                c.img,
+                c.mappableId
+              );
+              units.push(unit);
+            }
+          });
+          return new Panel(panel.id, panel.x, panel.y, panelUnits);
+        });
+        new Player(player.id, player.name, units, panels);
+      });
+      setPlayers(players);
+
+      setLoading(false);
+    });
+  };
+
+  useEffect(() => {
+    fetchNewGameData();
+  }, []);
+
+  const response: FetchNewGameDataProps = {
+    loading,
+    players,
+    currentUnit,
+    setCurrentUnit,
+    actionSelected,
+    setActionSelected,
   };
 
   return response;

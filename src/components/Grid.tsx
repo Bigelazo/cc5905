@@ -2,6 +2,7 @@ import Panel from "../model/Panel";
 import PanelComponent from "./PanelComponent";
 import "../styles/grid.css";
 import { useFetchGridData } from "./useFetch";
+import MapComponent from "./MapComponent";
 
 interface Props {
   currentUnit: string;
@@ -36,7 +37,7 @@ const Grid = ({
             currentUnit={currentUnit}
             actionSelected={actionSelected}
             p={p}
-            units={units.filter((u) => u.mappableId == p.id)}
+            units={p.storage}
             handleClick={handleClick}
           />
         );

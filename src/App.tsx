@@ -4,7 +4,7 @@ import { useState } from "react";
 import axios from "axios";
 import Grid from "./components/Grid";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useFetchGameData } from "./components/useFetch";
+import { useFetchGameData, useFetchNewGameData } from "./components/useFetch";
 
 const theme = createTheme({
   typography: {
@@ -29,6 +29,7 @@ const theme = createTheme({
 
 const App = () => {
   console.log("Rendering App");
+
   const [message, setMessage] = useState<string>("");
 
   const {
@@ -40,6 +41,8 @@ const App = () => {
     actionSelected,
     setActionSelected,
   } = useFetchGameData();
+
+  //const units = players.map((p) => p.units).flat();
 
   const receiveAction = (id: string) => {
     axios
@@ -95,6 +98,7 @@ const App = () => {
         </div>
       </div>
       <button onClick={() => axios.get(`${HOST}/reset`)}>Reset</button>
+      {/* TODO: Hacer que el botón re-renderee App */}
     </ThemeProvider>
   );
 };

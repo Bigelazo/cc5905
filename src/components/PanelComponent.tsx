@@ -21,6 +21,7 @@ const PanelComponent = ({
 
   return (
     <div
+      className={"grid__panel"}
       onClick={
         actionSelected == 2
           ? () => {
@@ -37,7 +38,6 @@ const PanelComponent = ({
             }
           : { gridColumnStart: p.x, gridRowStart: p.y }
       }
-      className={"grid__panel"}
     >
       {units.map((c: Character) => {
         return (
