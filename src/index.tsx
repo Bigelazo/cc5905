@@ -1,5 +1,5 @@
 import ReactDOM from "react-dom/client";
-import App from "./App";
+import App from "./components/App/App";
 
 (global as any).HOST = "http://localhost:8080";
 

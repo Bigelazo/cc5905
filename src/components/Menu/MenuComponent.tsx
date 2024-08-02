@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import "../styles/menu.css";
-import Button from "./Button";
-import Character from "../model/Character";
 import axios from "axios";
+import Button from "../Button";
+import Character from "../../model/Character";
+import "./menu.css";
 
 const UnitList = ({ units }: { units: Character[] }) => {
   return (
@@ -31,7 +31,7 @@ interface Props {
   playerIds: string[];
 }
 
-const Menu = ({
+const MenuComponent = ({
   currentUnit,
   actionSelected,
   setActionSelected,
@@ -142,4 +142,4 @@ const Menu = ({
   );
 };
 
-export default Menu;
+export default MenuComponent;

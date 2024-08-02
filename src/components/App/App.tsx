@@ -1,10 +1,10 @@
-import Menu from "./components/Menu";
-import "./styles/app.css";
 import { useState } from "react";
 import axios from "axios";
-import Grid from "./components/Grid";
+import "./app.css";
+import MenuComponent from "../Menu/MenuComponent";
+import GridComponent from "../Grid/GridComponent";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useFetchGameData, useFetchNewGameData } from "./components/useFetch";
+import { useFetchGameData } from "../../hooks/useFetch";
 
 const theme = createTheme({
   typography: {
@@ -32,18 +32,6 @@ const App = () => {
 
   const [message, setMessage] = useState<string>("");
 
-  /*const {
-    loading,
-    playerIds,
-    units,
-    currentUnit,
-    setCurrentUnit,
-    actionSelected,
-    setActionSelected,
-  } = useFetchGameData();*/
-  
-  
-  
   const {
     loading,
     players,
@@ -53,10 +41,9 @@ const App = () => {
     setActionSelected,
     lastAction,
     setLastAction,
-  } = useFetchNewGameData();
-  
-  console.log("players", players)
-  const units = players.map((p) => p.units).flat();
+  } = useFetchGameData();
+
+  const allUnits = players.map((p) => p.units).flat();
 
   const receiveAction = (id: string) => {
     axios
@@ -65,7 +52,11 @@ const App = () => {
         setCurrentUnit(response.data.currentUnit);
         setMessage(response.data.message);
         setActionSelected(-1);
-        setLastAction({sourceId: currentUnit, targetId: id, actionId: actionSelected});
+        setLastAction({
+          sourceId: currentUnit,
+          targetId: id,
+          actionId: actionSelected,
+        });
       });
   };
 
@@ -76,11 +67,11 @@ const App = () => {
           <div className="info-container">{message}</div>
           <div className="grid-container">
             <div className="turn-container">
-              {units.map((c) => {
+              {allUnits.map((c) => {
                 return (
                   <div
                     key={c.id}
-                    style={currentUnit === c.id ? { color: "green" } : {}}
+                    style={currentUnit === c.id ? { color: "yellow" } : {}}
                   >
                     {c.name}
                   </div>
@@ -89,11 +80,11 @@ const App = () => {
             </div>
             {players.map((player) => {
               return (
-                <Grid
+                <GridComponent
                   key={player.id}
                   currentUnit={currentUnit}
                   actionSelected={actionSelected}
-                  playerId={player.id}
+                  player={player}
                   size={[3, 3]}
                   handleClick={receiveAction}
                   lastAction={lastAction}
@@ -104,7 +95,7 @@ const App = () => {
           {loading ? (
             <div>Loading...</div>
           ) : (
-            <Menu
+            <MenuComponent
               currentUnit={currentUnit}
               actionSelected={actionSelected}
               setActionSelected={setActionSelected}
