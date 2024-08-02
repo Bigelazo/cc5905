@@ -1,17 +1,10 @@
 import Menu from "./components/Menu";
 import "./styles/app.css";
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import Grid from "./components/Grid";
-import {
-  ActionSelectedContext,
-  ActionSelectedProvider,
-  CurrentUnitContext,
-  CurrentUnitProvider,
-} from "./components/context";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-
-const host = "http://localhost:8080";
+import { useFetchGameData } from "./components/useFetch";
 
 const theme = createTheme({
   typography: {
@@ -38,68 +31,70 @@ const App = () => {
   console.log("Rendering App");
   const [message, setMessage] = useState<string>("");
 
-  const [playerIds, setPlayerIds] = useState<string[]>([]);
+  const {
+    loading,
+    playerIds,
+    units,
+    currentUnit,
+    setCurrentUnit,
+    actionSelected,
+    setActionSelected,
+  } = useFetchGameData();
 
-  const [loading, setLoading] = useState<boolean>(true);
-
-  const [units, setUnits] = useState<string[]>([]);
-
-  const fetchGameData = () => {
-    axios.get(`${host}/start`).then((response) => {
-      const players = response.data.parties;
-      const playerIds = players.map((p: any) => p.id);
-      for (const player of players) {
-        player.characters.map((c: any) => {
-          console.log(c.name);
-          units.push(c.name);
-        });
-      }
-      setPlayerIds(playerIds);
-      setLoading(false);
-    });
+  const receiveAction = (id: string) => {
+    axios
+      .post(`${HOST}/execute-action/${actionSelected}/${currentUnit}/${id}`)
+      .then((response) => {
+        setCurrentUnit(response.data.currentUnit);
+        setMessage(response.data.message);
+        setActionSelected(-1);
+      });
   };
-
-  useEffect(() => {
-    fetchGameData();
-  }, []);
 
   return (
     <ThemeProvider theme={theme}>
       <div className="main-container">
-        <ActionSelectedProvider>
-          <CurrentUnitProvider>
-            <div className="combat-area">
-              <div className="info-container">{message}</div>
-              <div className="grid-container">
-                <div className="turn-container">
-                  {units.map((c) => {
-                    return (
-                      <div
-                        key={c}
-                        //style={currentUnit === c ? { color: "green" } : {}}
-                      >
-                        {c}
-                      </div>
-                    );
-                  })}
-                </div>
-                {playerIds.map((playerId) => {
-                  return (
-                    <Grid
-                      key={playerId}
-                      playerId={playerId}
-                      size={[3, 3]}
-                      setMessage={setMessage}
-                    />
-                  );
-                })}
-              </div>
-              {loading ? <div>Loading...</div> : <Menu playerIds={playerIds} />}
+        <div className="combat-area">
+          <div className="info-container">{message}</div>
+          <div className="grid-container">
+            <div className="turn-container">
+              {units.map((c) => {
+                return (
+                  <div
+                    key={c.id}
+                    style={currentUnit === c.id ? { color: "green" } : {}}
+                  >
+                    {c.name}
+                  </div>
+                );
+              })}
             </div>
-          </CurrentUnitProvider>
-        </ActionSelectedProvider>
-        <button onClick={() => axios.get(`${host}/reset`)}>Reset</button>
+            {playerIds.map((playerId) => {
+              return (
+                <Grid
+                  key={playerId}
+                  currentUnit={currentUnit}
+                  actionSelected={actionSelected}
+                  playerId={playerId}
+                  size={[3, 3]}
+                  handleClick={receiveAction}
+                />
+              );
+            })}
+          </div>
+          {loading ? (
+            <div>Loading...</div>
+          ) : (
+            <Menu
+              currentUnit={currentUnit}
+              actionSelected={actionSelected}
+              setActionSelected={setActionSelected}
+              playerIds={playerIds}
+            />
+          )}
+        </div>
       </div>
+      <button onClick={() => axios.get(`${HOST}/reset`)}>Reset</button>
     </ThemeProvider>
   );
 };

@@ -1,25 +1,22 @@
-import { ReactNode, useContext, useState } from "react";
 import CharacterComponent from "./CharacterComponent";
 import Character from "../model/Character";
 import Panel from "../model/Panel";
-import { ActionSelectedContext, CurrentUnitContext } from "./context";
-import axios from "axios";
 
 interface Props {
+  currentUnit: string;
+  actionSelected: number;
   p: Panel;
   units: Character[];
-  setMessage: (s: string) => void;
   handleClick: (id: string) => void;
 }
 
-const PanelComponent = ({ p, units, setMessage, handleClick }: Props) => {
-  console.log("Rendering Panel " + p.id);
-
-  const { currentUnit, setCurrentUnit } = useContext(CurrentUnitContext);
-  const { actionSelected, setActionSelected } = useContext(
-    ActionSelectedContext
-  );
-
+const PanelComponent = ({
+  currentUnit,
+  actionSelected,
+  p,
+  units,
+  handleClick,
+}: Props) => {
   const ids = units.map((u) => u.id);
 
   return (
@@ -40,14 +37,14 @@ const PanelComponent = ({ p, units, setMessage, handleClick }: Props) => {
             }
           : { gridColumnStart: p.x, gridRowStart: p.y }
       }
-      className={"grid__panel" + (0 !== null ? " selection" : "")}
+      className={"grid__panel"}
     >
       {units.map((c: Character) => {
         return (
           <CharacterComponent
             key={c.id}
+            actionSelected={actionSelected}
             c={c}
-            setMessage={setMessage}
             handleClick={handleClick}
           />
         );

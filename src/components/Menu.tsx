@@ -1,16 +1,15 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "../styles/menu.css";
 import Button from "./Button";
-import { ActionSelectedContext, CurrentUnitContext } from "./context";
 import Character from "../model/Character";
 import axios from "axios";
 
 const UnitList = ({ units }: { units: Character[] }) => {
   return (
     <div className="queue-info">
-      {units.map((c: Character, i) => {
+      {units.map((c: Character) => {
         return (
-          <>
+          <div key={c.id}>
             <div className="info">
               <div className="info-name">{c.name}</div>
               <div className="info-others">
@@ -18,7 +17,7 @@ const UnitList = ({ units }: { units: Character[] }) => {
               </div>
             </div>
             {/*i<units.length-1?<div className="info-separator"/>:null*/}
-          </>
+          </div>
         );
       })}
     </div>
@@ -26,23 +25,23 @@ const UnitList = ({ units }: { units: Character[] }) => {
 };
 
 interface Props {
+  currentUnit: string;
+  actionSelected: number;
+  setActionSelected: (actionId: number) => void;
   playerIds: string[];
 }
 
-const Menu = ({ playerIds }: Props) => {
-  console.log("Rendering Menu");
-
-  const { actionSelected, setActionSelected } = useContext(
-    ActionSelectedContext
-  );
-
-  const { currentUnit, setCurrentUnit } = useContext(CurrentUnitContext);
-
+const Menu = ({
+  currentUnit,
+  actionSelected,
+  setActionSelected,
+  playerIds,
+}: Props) => {
   const [units, setUnits] = useState<Character[]>([]);
   const [units2, setUnits2] = useState<Character[]>([]);
 
   const loadGridData = () => {
-    axios.get("http://localhost:8080/grid/" + playerIds[0]).then((response) => {
+    axios.get(`${HOST}/grid/${playerIds[0]}`).then((response) => {
       const data = response.data;
       const units: Character[] = data.units.map((c: any) => {
         return new Character(c.id, c.name, c.hp, c.attack, c.img, c.mappableId);
@@ -52,7 +51,7 @@ const Menu = ({ playerIds }: Props) => {
   };
 
   const loadGridData2 = () => {
-    axios.get("http://localhost:8080/grid/" + playerIds[1]).then((response) => {
+    axios.get(`${HOST}/grid/${playerIds[1]}`).then((response) => {
       const data = response.data;
       const units: Character[] = data.units.map((c: any) => {
         return new Character(c.id, c.name, c.hp, c.attack, c.img, c.mappableId);
@@ -62,30 +61,27 @@ const Menu = ({ playerIds }: Props) => {
   };
 
   const showCurrentUnitActions = () => {
-    axios
-      .get("http://localhost:8080/show-actions/" + currentUnit)
-      .then((response) => {
-        const data = response.data.actions;
-        let a: { [key: string]: number } = {};
-        let holder: { [key: string]: { [key: string]: number } } = {};
-        for (let arrayId in data) {
-          let id: number = data[arrayId].id;
-          let action: string = data[arrayId].action;
-          if (action.includes("→")) {
-            const category: string = action.split("→")[0];
-            const actionName: string = action.split("→")[1];
-            holder[category] === undefined
-              ? (holder[category] = { [actionName]: id })
-              : (holder[category][actionName] = id);
-            a[category] = -id;
-          } else {
-            a[action] = id;
-          }
+    axios.get(`${HOST}/show-actions/${currentUnit}`).then((response) => {
+      const data = response.data.actions;
+      let a: { [key: string]: number } = {};
+      let holder: { [key: string]: { [key: string]: number } } = {};
+      for (let arrayId in data) {
+        let id: number = data[arrayId].id;
+        let action: string = data[arrayId].action;
+        if (action.includes("→")) {
+          const category: string = action.split("→")[0];
+          const actionName: string = action.split("→")[1];
+          holder[category] === undefined
+            ? (holder[category] = { [actionName]: id })
+            : (holder[category][actionName] = id);
+          a[category] = -id;
+        } else {
+          a[action] = id;
         }
-        setActionHolder(holder);
-        setActions(a);
-        console.log(data);
-      });
+      }
+      setActionHolder(holder);
+      setActions(a);
+    });
   };
 
   const swapActions = (actionName: string) => {
@@ -128,6 +124,7 @@ const Menu = ({ playerIds }: Props) => {
         {Object.entries(actions).map(([actionName, actionId]) => {
           return (
             <Button
+              key={actionId}
               onClick={
                 actionId < 0
                   ? () => swapActions(actionName)

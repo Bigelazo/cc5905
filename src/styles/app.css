@@ -6,7 +6,6 @@ html {
   font-family: 'FFVI';
   font-size: 1.6em;
   color: #ffff;
-  /*-webkit-text-stroke: 0.04em #000;*/
 }
 
 @font-face {
@@ -46,7 +45,7 @@ html {
   height: 20px;
 }
 
-.combat-area{
+.combat-area {
   background: url('/public/img/bg_03.png') no-repeat;
   background-size: 100% 100%;
   padding: 16px;

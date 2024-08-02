@@ -1,58 +1,24 @@
-import React, { useContext, useEffect, useState } from "react";
-import Character from "../model/Character";
 import Panel from "../model/Panel";
 import PanelComponent from "./PanelComponent";
 import "../styles/grid.css";
-import axios from "axios";
-import { ActionSelectedContext, CurrentUnitContext } from "./context";
+import { useFetchGridData } from "./useFetch";
 
 interface Props {
+  currentUnit: string;
+  actionSelected: number;
   playerId: string;
   size: [number, number];
-  setMessage: (s: string) => void;
+  handleClick: (id: string) => void;
 }
 
-const Grid = ({ playerId, size, setMessage }: Props) => {
-  console.log("Rendering Grid " + playerId);
-
-  const [units, setUnits] = useState<Character[]>([]);
-  const [panels, setPanels] = useState<Panel[]>([]);
-
-  const { currentUnit, setCurrentUnit } = useContext(CurrentUnitContext);
-  const { actionSelected, setActionSelected } = useContext(
-    ActionSelectedContext
-  );
-
-  const loadGridData = () => {
-    axios.get("http://localhost:8080/grid/" + playerId).then((response) => {
-      const data = response.data;
-      const units: Character[] = data.units.map((c: any) => {
-        return new Character(c.id, c.name, c.hp, c.attack, c.img, c.mappableId);
-      });
-      const panels: Panel[] = data.panels.map((p: any) => {
-        return new Panel(p.id, p.x, p.y);
-      });
-
-      setUnits(units);
-      setPanels(panels);
-    });
-  };
-
-  useEffect(() => {
-    loadGridData();
-  }, [currentUnit]);
-
-  const receiveAction = (id: string) => {
-    axios
-      .post(
-        `http://localhost:8080/execute-action/${actionSelected}/${currentUnit}/${id}`
-      )
-      .then((response) => {
-        setCurrentUnit(response.data.currentUnit);
-        setMessage(response.data.message);
-        setActionSelected(-1);
-      });
-  };
+const Grid = ({
+  currentUnit,
+  actionSelected,
+  playerId,
+  size,
+  handleClick,
+}: Props) => {
+  const { units, panels } = useFetchGridData(playerId, currentUnit);
 
   return (
     <div
@@ -67,10 +33,11 @@ const Grid = ({ playerId, size, setMessage }: Props) => {
         return (
           <PanelComponent
             key={p.id}
+            currentUnit={currentUnit}
+            actionSelected={actionSelected}
             p={p}
             units={units.filter((u) => u.mappableId == p.id)}
-            setMessage={setMessage}
-            handleClick={receiveAction}
+            handleClick={handleClick}
           />
         );
       })}
