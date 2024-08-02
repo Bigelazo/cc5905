@@ -28,37 +28,22 @@ interface Props {
   currentUnit: string;
   actionSelected: number;
   setActionSelected: (actionId: number) => void;
-  playerIds: string[];
+  units: Character[];
+  units2: Character[];
 }
 
 const MenuComponent = ({
   currentUnit,
   actionSelected,
   setActionSelected,
-  playerIds,
+  units,
+  units2,
 }: Props) => {
-  const [units, setUnits] = useState<Character[]>([]);
-  const [units2, setUnits2] = useState<Character[]>([]);
+  const [actions, setActions] = useState<{ [key: string]: number }>({ "": 0 });
 
-  const loadGridData = () => {
-    axios.get(`${HOST}/grid/${playerIds[0]}`).then((response) => {
-      const data = response.data;
-      const units: Character[] = data.units.map((c: any) => {
-        return new Character(c.id, c.name, c.hp, c.attack, c.img, c.mappableId);
-      });
-      setUnits(units);
-    });
-  };
-
-  const loadGridData2 = () => {
-    axios.get(`${HOST}/grid/${playerIds[1]}`).then((response) => {
-      const data = response.data;
-      const units: Character[] = data.units.map((c: any) => {
-        return new Character(c.id, c.name, c.hp, c.attack, c.img, c.mappableId);
-      });
-      setUnits2(units);
-    });
-  };
+  const [actionHolder, setActionHolder] = useState<{ [key: string]: any }>({
+    "": { "": 0 },
+  });
 
   const showCurrentUnitActions = () => {
     axios.get(`${HOST}/show-actions/${currentUnit}`).then((response) => {
@@ -103,16 +88,6 @@ const MenuComponent = ({
     }
   };
 
-  const [actions, setActions] = useState<{ [key: string]: number }>({ "": 0 });
-  const [actionHolder, setActionHolder] = useState<{
-    [key: string]: any;
-  }>({ "": { "": 0 } });
-
-  useEffect(() => {
-    loadGridData();
-    loadGridData2();
-  }, [actionSelected]);
-
   useEffect(() => {
     showCurrentUnitActions();
   }, [currentUnit]);
@@ -126,7 +101,7 @@ const MenuComponent = ({
             <Button
               key={actionId}
               onClick={
-                actionId < 0
+                actionId < 0 // actionId negativo es querer volver al menú anterior
                   ? () => swapActions(actionName)
                   : () => setActionSelected(actionId)
               }

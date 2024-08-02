@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { LastActionType } from "../../hooks/useFetch";
-import CharacterComponent from "./../CharacterComponent";
+import CharacterComponent from "../CharacterComponent";
 import Character from "../../model/Character";
 import Panel from "../../model/Panel";
 import Player from "../../model/Player";

@@ -1,10 +1,10 @@
 import { useState } from "react";
 import axios from "axios";
-import "./app.css";
-import MenuComponent from "../Menu/MenuComponent";
-import GridComponent from "../Grid/GridComponent";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useFetchGameData } from "../../hooks/useFetch";
+import MenuComponent from "../Menu/MenuComponent";
+import GridComponent from "../Grid/GridComponent";
+import "./app.css";
 
 const theme = createTheme({
   typography: {
@@ -99,7 +99,8 @@ const App = () => {
               currentUnit={currentUnit}
               actionSelected={actionSelected}
               setActionSelected={setActionSelected}
-              playerIds={players.map((p) => p.id)}
+              units={players[0].units}
+              units2={players[1].units}
             />
           )}
         </div>
