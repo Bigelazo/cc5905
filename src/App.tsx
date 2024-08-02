@@ -32,7 +32,7 @@ const App = () => {
 
   const [message, setMessage] = useState<string>("");
 
-  const {
+  /*const {
     loading,
     playerIds,
     units,
@@ -40,9 +40,10 @@ const App = () => {
     setCurrentUnit,
     actionSelected,
     setActionSelected,
-  } = useFetchGameData();
-
-  /*
+  } = useFetchGameData();*/
+  
+  
+  
   const {
     loading,
     players,
@@ -51,9 +52,9 @@ const App = () => {
     actionSelected,
     setActionSelected,
   } = useFetchNewGameData();
-   */
-
-  //const units = players.map((p) => p.units).flat();
+  
+  console.log("players", players)
+  const units = players.map((p) => p.units).flat();
 
   const receiveAction = (id: string) => {
     axios
@@ -83,13 +84,13 @@ const App = () => {
                 );
               })}
             </div>
-            {playerIds.map((playerId) => {
+            {players.map((player) => {
               return (
                 <Grid
-                  key={playerId}
+                  key={player.id}
                   currentUnit={currentUnit}
                   actionSelected={actionSelected}
-                  playerId={playerId}
+                  playerId={player.id}
                   size={[3, 3]}
                   handleClick={receiveAction}
                 />
@@ -103,7 +104,7 @@ const App = () => {
               currentUnit={currentUnit}
               actionSelected={actionSelected}
               setActionSelected={setActionSelected}
-              playerIds={playerIds}
+              playerIds={players.map((p) => p.id)}
             />
           )}
         </div>

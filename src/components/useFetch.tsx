@@ -57,7 +57,7 @@ export const useFetchGameData = () => {
     actionSelected,
     setActionSelected,
   };
-
+  console.log("returning response")
   return response;
 };
 
@@ -146,7 +146,7 @@ export const useFetchNewGameData = () => {
           });
           return new Panel(panel.id, panel.x, panel.y, panelUnits);
         });
-        new Player(player.id, player.name, units, panels);
+        return new Player(player.id, player.name, units, panels);
       });
       setPlayers(players);
 
