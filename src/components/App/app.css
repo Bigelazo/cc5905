@@ -3,10 +3,9 @@ html {
   padding-left: 2rem;
   padding-right: 2rem;
   padding-bottom: 1rem;
-  font-family: 'Terraria';
-  font-size: 1.2em;
+  font-family: 'FFVI';
+  font-size: 1.6em;
   color: #ffff;
-  -webkit-text-stroke: 0.04em #000;
 }
 
 @font-face {
@@ -20,8 +19,13 @@ html {
 }
 
 @font-face {
-  font-family: 'Terraria';
-  src: url('/public/font/terraria.ttf') format('opentype');
+  font-family: 'FFVI';
+  src: url('/public/font/Final\ Fantasy\ VI\ SNESb.ttf') format('opentype');
+}
+
+@font-face {
+  font-family: 'FFVII';
+  src: url('/public/font/Final\ Fantasy\ VII.ttf') format('opentype');
 }
 
 .main-container {
@@ -32,13 +36,17 @@ html {
 }
 
 .info-container {
-  background-color: #5584AC;
+  background: linear-gradient(to bottom, rgba(87,92,166), rgba(22,32,83));
+  border: 2px solid #ffffff;
+  box-shadow: 0px 0px 5px 1px #000, #000 0px 0px 5px 1px inset;
   display: flex;
   justify-content: center;
-  border: 10px ridge lightgray;
   padding: 1em;
   height: 20px;
-  box-shadow:
-  inset 0 -3em 3em rgba(0, 0, 0, 0.1),
-  0.3em 0.3em 1em rgba(0, 0, 0, 0.3);
+}
+
+.combat-area {
+  background: url('/public/img/bg_03.png') no-repeat;
+  background-size: 100% 100%;
+  padding: 16px;
 }

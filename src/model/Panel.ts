@@ -1,12 +1,16 @@
+import Character from "./Character";
+
 class Panel {
-  id: number;
+  id: string;
   x: number;
   y: number;
+  storage: Character[] = [];
 
-  constructor(id: number, x: number, y: number) {
+  constructor(id: string, x: number, y: number, storage: Character[]) {
     this.id = id;
     this.x = x;
     this.y = y;
+    this.storage = storage;
   }
 }
 
