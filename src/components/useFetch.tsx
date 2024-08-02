@@ -115,13 +115,22 @@ interface FetchNewGameDataProps {
   setCurrentUnit: (currentUnit: string) => void;
   actionSelected: number;
   setActionSelected: (actionSelected: number) => void;
+  lastAction: LastActionType;
+  setLastAction: (lastAction: LastActionType) => void;
 }
+
+export type LastActionType = {
+  sourceId: string | null;
+  targetId: string | null;
+  actionId: number | null;
+};
 
 export const useFetchNewGameData = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [players, setPlayers] = useState<Player[]>([]);
   const [currentUnit, setCurrentUnit] = useState<string>("");
   const [actionSelected, setActionSelected] = useState<number>(-1);
+  const [lastAction, setLastAction] = useState<LastActionType>({sourceId: null, targetId: null, actionId: null});
 
   const fetchNewGameData = () => {
     axios.get(`${HOST}/start`).then((response) => {
@@ -166,6 +175,8 @@ export const useFetchNewGameData = () => {
     setCurrentUnit,
     actionSelected,
     setActionSelected,
+    lastAction,
+    setLastAction
   };
 
   return response;

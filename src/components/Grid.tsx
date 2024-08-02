@@ -3,6 +3,7 @@ import PanelComponent from "./PanelComponent";
 import "../styles/grid.css";
 import { useFetchGridData } from "./useFetch";
 import MapComponent from "./MapComponent";
+import { LastActionType } from "./useFetch"
 
 interface Props {
   currentUnit: string;
@@ -10,6 +11,7 @@ interface Props {
   playerId: string;
   size: [number, number];
   handleClick: (id: string) => void;
+  lastAction: LastActionType;
 }
 
 const Grid = ({
@@ -18,9 +20,10 @@ const Grid = ({
   playerId,
   size,
   handleClick,
+  lastAction
 }: Props) => {
   const { units, panels } = useFetchGridData(playerId, currentUnit);
-
+  console.log(currentUnit)
   //const units = p.storage
   return (
     <div
@@ -40,6 +43,7 @@ const Grid = ({
             p={p}
             units={p.storage}
             handleClick={handleClick}
+            lastAction={lastAction}
           />
         );
       })}

@@ -51,6 +51,8 @@ const App = () => {
     setCurrentUnit,
     actionSelected,
     setActionSelected,
+    lastAction,
+    setLastAction,
   } = useFetchNewGameData();
   
   console.log("players", players)
@@ -63,6 +65,7 @@ const App = () => {
         setCurrentUnit(response.data.currentUnit);
         setMessage(response.data.message);
         setActionSelected(-1);
+        setLastAction({sourceId: currentUnit, targetId: id, actionId: actionSelected});
       });
   };
 
@@ -93,6 +96,7 @@ const App = () => {
                   playerId={player.id}
                   size={[3, 3]}
                   handleClick={receiveAction}
+                  lastAction={lastAction}
                 />
               );
             })}

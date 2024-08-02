@@ -2,12 +2,14 @@ import CharacterComponent from "./CharacterComponent";
 import Character from "../model/Character";
 import Panel from "../model/Panel";
 import {motion} from "framer-motion";
+import { LastActionType } from "./useFetch";
 interface Props {
   currentUnit: string;
   actionSelected: number;
   p: Panel;
   units: Character[];
   handleClick: (id: string) => void;
+  lastAction: LastActionType
 }
 
 const PanelComponent = ({
@@ -16,9 +18,10 @@ const PanelComponent = ({
   p,
   units,
   handleClick,
+  lastAction
 }: Props) => {
   const ids = units.map((u) => u.id);
-
+  console.log('lastAction', lastAction)
   return (
     <div
       className={"grid__panel"}
@@ -40,10 +43,12 @@ const PanelComponent = ({
       }
     >
       {units.map((c: Character) => {
+        const ops = false && lastAction.sourceId && lastAction.sourceId == c.id?{animate: {x: 10, y: 20}}:{}
         return (
           <motion.div
-          animate={{x: 10, y: 20}}
-          transition={{type: "spring"}}
+          {...ops}
+          /*animate={{x: 10, y: 20}}
+          transition={{type: "spring"}}*/
           >
             <CharacterComponent
               key={c.id}
