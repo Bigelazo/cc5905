@@ -5,16 +5,22 @@ class Character {
   atk: number;
   img: string;
   isDefeated: boolean;
-  mappableId: string | null;
+  panelId: string | null;
+  attributes: { [key: string]: any };
 
-  constructor(id: string, name: string, hp: number, atk: number, img: string, mappableId: string | null) {
+  constructor(id: string, name: string,
+    hp: number, atk: number,
+    img: string,
+    panelId: string | null,
+    attributes: { [key: string]: any }) {
     this.id = id;
     this.name = name;
     this.hp = hp;
     this.atk = atk;
     this.img = img;
     this.isDefeated = false;
-    this.mappableId = mappableId;
+    this.panelId = panelId;
+    this.attributes = attributes;
   }
 }
 

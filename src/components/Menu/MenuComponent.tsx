@@ -9,14 +9,16 @@ const UnitList = ({ units }: { units: Character[] }) => {
     <div className="queue-info">
       {units.map((c: Character) => {
         return (
-          <div key={c.id}>
-            <div className="info">
-              <div className="info-name">{c.name}</div>
-              <div className="info-others">
-                <label className="info-label">HP</label> {c.hp}/999
-              </div>
-            </div>
-            {/*i<units.length-1?<div className="info-separator"/>:null*/}
+          <div key={c.id} className="info">
+            {Object.entries(c.attributes).map(([key, value]) => {
+              return (
+                <div className="info">
+                  <div className="info-others">
+                    <label className="info-label">{key}:</label> {value}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         );
       })}

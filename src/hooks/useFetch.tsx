@@ -34,7 +34,7 @@ export const useFetchGameData = () => {
 
   const fetchGameData = () => {
     axios.get(`${HOST}/start`).then((response) => {
-      const playerData = response.data.parties;
+      const playerData = response.data.players;
       const currentUnit = response.data.currentUnit;
       setCurrentUnit(currentUnit);
 
@@ -48,9 +48,11 @@ export const useFetchGameData = () => {
               c.hp,
               c.attack,
               c.img,
-              c.mappableId
+              c.panelId,
+              c.attributes
             );
             units.push(unit);
+            console.log(c.attributes);
             return unit;
           });
           return new Panel(panel.id, panel.x, panel.y, panelUnits);

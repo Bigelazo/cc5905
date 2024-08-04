@@ -11,16 +11,16 @@ const CharacterComponent = ({ actionSelected, c, handleClick }: Props) => {
   return (
     <Tooltip
       title={
-        <div>
-          <div>
-            <label className="info-label">NAME</label>: {c.name}
-          </div>
-          <div>
-            <label className="info-label">HP</label>: {c.hp}
-          </div>
-          <div>
-            <label className="info-label">ATK</label>: {c.atk}
-          </div>
+        <div key={c.id} className="info">
+          {Object.entries(c.attributes).map(([key, value]) => {
+            return (
+              <div className="info">
+                <div className="info-others">
+                  <label className="info-label">{key}:</label> {value}
+                </div>
+              </div>
+            );
+          })}
         </div>
       } /*componentsProps={{ tooltip: { sx: { background: "red" } }, arrow: { sx: { color: "red" } }, }}*/
     >
