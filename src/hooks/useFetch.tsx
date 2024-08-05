@@ -25,7 +25,7 @@ export const useFetchGameData = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [players, setPlayers] = useState<Player[]>([]);
   const [currentUnit, setCurrentUnit] = useState<string>("");
-  const [actionSelected, setActionSelected] = useState<string>("-1");
+  const [actionSelected, setActionSelected] = useState<string>("MainMenu");
   const [lastAction, setLastAction] = useState<LastActionType>({
     sourceId: null,
     targetId: null,

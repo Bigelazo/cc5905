@@ -43,15 +43,23 @@ const App = () => {
     setLastAction,
   } = useFetchGameData();
 
+  console.log("Action selected: " + actionSelected);
+
   const allUnits = players.map((p) => p.units).flat();
 
   const receiveAction = (id: string) => {
+    const actionBreadCrumb = actionSelected.split("→");
+    const theRealActionSelected = actionBreadCrumb[actionBreadCrumb.length - 1];
+    const secretAction = actionBreadCrumb[actionBreadCrumb.length - 2];
+    const target = secretAction.includes("↓") ? secretAction.split("↓")[1] : id;
     axios
-      .post(`${HOST}/execute-action/${actionSelected}/${currentUnit}/${id}`)
+      .post(
+        `${HOST}/execute-action/${theRealActionSelected}/${currentUnit}/${target}`
+      )
       .then((response) => {
         setCurrentUnit(response.data.currentUnit);
         setMessage(response.data.message);
-        setActionSelected("-1");
+        setActionSelected("MainMenu");
         setLastAction({
           sourceId: currentUnit,
           targetId: id,
@@ -97,6 +105,7 @@ const App = () => {
               currentUnit={currentUnit}
               actionSelected={actionSelected}
               setActionSelected={setActionSelected}
+              receiveAction={receiveAction}
               units={players[0].units}
               units2={players[1].units}
             />

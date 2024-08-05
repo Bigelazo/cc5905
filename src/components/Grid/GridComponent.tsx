@@ -38,7 +38,7 @@ const GridComponent = ({
             key={p.id}
             className={"grid__panel"}
             onClick={
-              actionSelected == "2"
+              actionSelected.includes("2")
                 ? () => {
                     handleClick(p.id);
                   }
