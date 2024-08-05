@@ -1,35 +1,40 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Button from "../Button";
+import ButtonComponent from "../ButtonComponent";
 import Character from "../../model/Character";
 import "./menu.css";
 
-const UnitList = ({ units }: { units: Character[] }) => {
-  return (
-    <div className="queue-info">
-      {units.map((c: Character) => {
-        return (
-          <div key={c.id} className="info">
-            {Object.entries(c.attributes).map(([key, value]) => {
-              return (
-                <div className="info">
-                  <div className="info-others">
-                    <label className="info-label">{key}:</label> {value}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        );
-      })}
-    </div>
-  );
-};
+type ActionMenu = (
+  | {
+      name: string;
+      actionId: string;
+      actions?: undefined;
+    }
+  | {
+      name: string;
+      actionId: string;
+      actions: ActionMenu;
+    }
+)[];
+
+/*const selector: ActionMenu = [
+  { name: "Move", actionId: "2" },
+  { name: "Punch", actionId: "1" },
+  {
+    name: "Spell",
+    actionId: "0",
+    actions: [
+      { name: "Fireball", actionId: "3" },
+      { name: "Icebolt", actionId: "4" },
+    ],
+  },
+];
+*/
 
 interface Props {
   currentUnit: string;
-  actionSelected: number;
-  setActionSelected: (actionId: number) => void;
+  actionSelected: string;
+  setActionSelected: (actionId: string) => void;
   units: Character[];
   units2: Character[];
 }
@@ -41,53 +46,12 @@ const MenuComponent = ({
   units,
   units2,
 }: Props) => {
-  const [actions, setActions] = useState<{ [key: string]: number }>({ "": 0 });
-
-  const [actionHolder, setActionHolder] = useState<{ [key: string]: any }>({
-    "": { "": 0 },
-  });
+  const [menu, setMenu] = useState<ActionMenu>([]);
 
   const showCurrentUnitActions = () => {
     axios.get(`${HOST}/show-actions/${currentUnit}`).then((response) => {
-      const data = response.data.actions;
-      let a: { [key: string]: number } = {};
-      let holder: { [key: string]: { [key: string]: number } } = {};
-      for (let arrayId in data) {
-        let id: number = data[arrayId].id;
-        let action: string = data[arrayId].action;
-        if (action.includes("→")) {
-          const category: string = action.split("→")[0];
-          const actionName: string = action.split("→")[1];
-          holder[category] === undefined
-            ? (holder[category] = { [actionName]: id })
-            : (holder[category][actionName] = id);
-          a[category] = -id;
-        } else {
-          a[action] = id;
-        }
-      }
-      setActionHolder(holder);
-      setActions(a);
+      setMenu(parseActionMenu(response.data.actions));
     });
-  };
-
-  const swapActions = (actionName: string) => {
-    const holder = actionHolder;
-    const action = actions;
-    if (actionName === "Go Back") {
-      // Queremos volver al menú anterior
-      setActions(holder);
-      setActionHolder(action);
-    } else {
-      // Queremos ir al siguiente menú indexado
-      if (holder[actionName] === undefined) {
-        setActions(holder);
-      } else {
-        holder[actionName]["Go Back"] = -100;
-        setActions(holder[actionName]);
-      }
-      setActionHolder(action);
-    }
   };
 
   useEffect(() => {
@@ -98,21 +62,13 @@ const MenuComponent = ({
     <div className="menu-container">
       <UnitList units={units} />
       <div className="action-selection">
-        {Object.entries(actions).map(([actionName, actionId]) => {
-          return (
-            <Button
-              key={actionId}
-              onClick={
-                actionId < 0 // actionId negativo es querer volver al menú anterior
-                  ? () => swapActions(actionName)
-                  : () => setActionSelected(actionId)
-              }
-              selected={actionSelected == actionId}
-            >
-              {actionName}
-            </Button>
-          );
-        })}
+        <ActionSelector
+          isVisible={true}
+          currentUnit={currentUnit}
+          setActionSelected={setActionSelected}
+          actionSelected={actionSelected}
+          actionMenu={menu}
+        />
       </div>
       <UnitList units={units2} />
     </div>
@@ -120,3 +76,111 @@ const MenuComponent = ({
 };
 
 export default MenuComponent;
+
+const parseActionMenu = (jsonData: { action: string; id: string }[]) => {
+  let selector: ActionMenu = [];
+
+  let counter = -10;
+
+  const addActionToMenu = (
+    menu: ActionMenu,
+    breadCrumb: string[],
+    id: string
+  ) => {
+    if (breadCrumb.length === 0) return;
+
+    const [category, ...rest] = breadCrumb;
+    let actionCategory = menu.find((item) => item.name === category);
+
+    if (!actionCategory) {
+      actionCategory =
+        rest.length === 0
+          ? { name: category, actionId: id }
+          : { name: category, actionId: (counter--).toString(), actions: [] };
+      menu.push(actionCategory);
+    }
+
+    if (rest.length > 0 && actionCategory.actions) {
+      addActionToMenu(actionCategory.actions, rest, id);
+    }
+  };
+
+  jsonData.map(({ action, id }) => {
+    const breadCrumb = action.split("→");
+    addActionToMenu(selector, breadCrumb, id);
+  });
+
+  console.log(selector);
+  return selector;
+};
+
+const UnitList = ({ units }: { units: Character[] }) => {
+  return (
+    <div className="queue-info">
+      {units.map((c: Character) => {
+        return (
+          <div key={c.id} className="info">
+            {Object.entries(c.attributes).map(([key, value]) => {
+              return (
+                <div key={key} className="info-others">
+                  <label className="info-label">{key}:</label> {value}
+                </div>
+              );
+            })}
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
+interface ActionSelectorProps {
+  isVisible: boolean;
+  currentUnit: string;
+  actionSelected: string;
+  setActionSelected: (actionId: string) => void;
+  actionMenu: ActionMenu;
+}
+
+const ActionSelector = ({
+  isVisible,
+  currentUnit,
+  actionSelected,
+  setActionSelected,
+  actionMenu,
+}: ActionSelectorProps) => {
+  return (
+    <>
+      {isVisible &&
+        actionMenu.map((action) => {
+          return (
+            <>
+              <ButtonComponent
+                selected={actionSelected === action.actionId}
+                onClick={() => setActionSelected(action.actionId)}
+              >
+                {action.name}
+              </ButtonComponent>
+              {action.actions && (
+                <>
+                  <ActionSelector
+                    isVisible={actionSelected === action.actionId}
+                    currentUnit={currentUnit}
+                    actionSelected={actionSelected}
+                    setActionSelected={setActionSelected}
+                    actionMenu={action.actions}
+                  />
+                  <ButtonComponent
+                    selected={actionSelected === action.actionId}
+                    onClick={() => setActionSelected("-1")}
+                  >
+                    Go Back
+                  </ButtonComponent>
+                </>
+              )}
+            </>
+          );
+        })}
+    </>
+  );
+};

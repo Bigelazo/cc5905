@@ -8,7 +8,7 @@ import "./grid.css";
 
 interface Props {
   currentUnit: string;
-  actionSelected: number;
+  actionSelected: string;
   player: Player;
   size: [number, number];
   handleClick: (id: string) => void;
@@ -35,9 +35,10 @@ const GridComponent = ({
       {player.panels.map((p: Panel) => {
         return (
           <div
+            key={p.id}
             className={"grid__panel"}
             onClick={
-              actionSelected == 2
+              actionSelected == "2"
                 ? () => {
                     handleClick(p.id);
                   }
@@ -62,12 +63,12 @@ const GridComponent = ({
                   : {};
               return (
                 <motion.div
+                  key={char.id}
                   {...ops}
                   animate={{ x: 10, y: 20 }}
                   transition={{ type: "spring" }}
                 >
                   <CharacterComponent
-                    key={char.id}
                     actionSelected={actionSelected}
                     c={char}
                     handleClick={handleClick}

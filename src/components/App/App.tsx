@@ -33,7 +33,7 @@ const App = () => {
   const [message, setMessage] = useState<string>("");
 
   const {
-    loading,
+    isLoading,
     players,
     currentUnit,
     setCurrentUnit,
@@ -51,7 +51,7 @@ const App = () => {
       .then((response) => {
         setCurrentUnit(response.data.currentUnit);
         setMessage(response.data.message);
-        setActionSelected(-1);
+        setActionSelected("-1");
         setLastAction({
           sourceId: currentUnit,
           targetId: id,
@@ -73,7 +73,7 @@ const App = () => {
                     key={c.id}
                     style={currentUnit === c.id ? { color: "yellow" } : {}}
                   >
-                    {c.name}
+                    {c.attributes["NAME"]}
                   </div>
                 );
               })}
@@ -92,9 +92,7 @@ const App = () => {
               );
             })}
           </div>
-          {loading ? (
-            <div>Loading...</div>
-          ) : (
+          {!isLoading && (
             <MenuComponent
               currentUnit={currentUnit}
               actionSelected={actionSelected}

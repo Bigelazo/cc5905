@@ -2,7 +2,7 @@ import Character from "../model/Character";
 import Tooltip from "@mui/material/Tooltip";
 
 interface Props {
-  actionSelected: number;
+  actionSelected: string;
   c: Character;
   handleClick: (id: string) => void;
 }
@@ -11,13 +11,11 @@ const CharacterComponent = ({ actionSelected, c, handleClick }: Props) => {
   return (
     <Tooltip
       title={
-        <div key={c.id} className="info">
+        <div>
           {Object.entries(c.attributes).map(([key, value]) => {
             return (
-              <div className="info">
-                <div className="info-others">
-                  <label className="info-label">{key}:</label> {value}
-                </div>
+              <div className="info-others" key={key}>
+                <label className="info-label">{key}:</label> {value}
               </div>
             );
           })}
@@ -26,7 +24,7 @@ const CharacterComponent = ({ actionSelected, c, handleClick }: Props) => {
     >
       <img
         onClick={
-          actionSelected != 2 && actionSelected != -1
+          actionSelected != "2" && actionSelected != "-1"
             ? () => {
                 handleClick(c.id);
               }

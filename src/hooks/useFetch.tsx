@@ -5,12 +5,12 @@ import Panel from "../model/Panel";
 import Player from "../model/Player";
 
 interface FetchGameDataProps {
-  loading: boolean;
+  isLoading: boolean;
   players: Player[];
   currentUnit: string;
   setCurrentUnit: (currentUnit: string) => void;
-  actionSelected: number;
-  setActionSelected: (actionSelected: number) => void;
+  actionSelected: string;
+  setActionSelected: (actionSelected: string) => void;
   lastAction: LastActionType;
   setLastAction: (lastAction: LastActionType) => void;
 }
@@ -18,14 +18,14 @@ interface FetchGameDataProps {
 export type LastActionType = {
   sourceId: string | null;
   targetId: string | null;
-  actionId: number | null;
+  actionId: string | null;
 };
 
 export const useFetchGameData = () => {
-  const [loading, setLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [players, setPlayers] = useState<Player[]>([]);
   const [currentUnit, setCurrentUnit] = useState<string>("");
-  const [actionSelected, setActionSelected] = useState<number>(-1);
+  const [actionSelected, setActionSelected] = useState<string>("-1");
   const [lastAction, setLastAction] = useState<LastActionType>({
     sourceId: null,
     targetId: null,
@@ -42,17 +42,8 @@ export const useFetchGameData = () => {
         let units: Character[] = [];
         const panels: Panel[] = player.panels.map((panel: any) => {
           const panelUnits = panel.storage.map((c: any) => {
-            const unit = new Character(
-              c.id,
-              c.name,
-              c.hp,
-              c.attack,
-              c.img,
-              c.panelId,
-              c.attributes
-            );
+            const unit = new Character(c.id, c.img, c.attributes);
             units.push(unit);
-            console.log(c.attributes);
             return unit;
           });
           return new Panel(panel.id, panel.x, panel.y, panelUnits);
@@ -61,7 +52,7 @@ export const useFetchGameData = () => {
       });
       setPlayers(players);
 
-      setLoading(false);
+      setIsLoading(false);
     });
   };
 
@@ -70,7 +61,7 @@ export const useFetchGameData = () => {
   }, [currentUnit]);
 
   const response: FetchGameDataProps = {
-    loading,
+    isLoading,
     players,
     currentUnit,
     setCurrentUnit,
