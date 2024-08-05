@@ -1,10 +1,11 @@
-import { motion } from "framer-motion";
+
 import { LastActionType } from "../../hooks/useFetch";
 import CharacterComponent from "../CharacterComponent";
 import Character from "../../model/Character";
 import Panel from "../../model/Panel";
 import Player from "../../model/Player";
 import "./grid.css";
+import Animation from "./Animation";
 
 interface Props {
   currentUnit: string;
@@ -14,6 +15,7 @@ interface Props {
   handleClick: (id: string) => void;
   lastAction: LastActionType;
 }
+
 
 const GridComponent = ({
   currentUnit,
@@ -35,6 +37,7 @@ const GridComponent = ({
       {player.panels.map((p: Panel) => {
         return (
           <div
+            id={"panel_"+p.id}
             key={p.id}
             className={"grid__panel"}
             onClick={
@@ -57,23 +60,19 @@ const GridComponent = ({
             }
           >
             {p.storage.map((char: Character) => {
-              const ops =
-                false && lastAction.sourceId && lastAction.sourceId == char.id
-                  ? { animate: { x: 10, y: 20 } }
-                  : {};
               return (
-                <motion.div
+                <Animation
                   key={char.id}
-                  {...ops}
-                  animate={{ x: 10, y: 20 }}
-                  transition={{ type: "spring" }}
+                  panel={p}
+                  char={char}
+                  lastAction={lastAction}
                 >
                   <CharacterComponent
                     actionSelected={actionSelected}
                     c={char}
                     handleClick={handleClick}
                   />
-                </motion.div>
+                </Animation>
               );
             })}
           </div>

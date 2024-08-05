@@ -56,6 +56,7 @@ const App = () => {
           sourceId: currentUnit,
           targetId: id,
           actionId: actionSelected,
+          state: players,
         });
       });
   };

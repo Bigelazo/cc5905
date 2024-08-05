@@ -19,6 +19,7 @@ export type LastActionType = {
   sourceId: string | null;
   targetId: string | null;
   actionId: string | null;
+  state: Player[];
 };
 
 export const useFetchGameData = () => {
@@ -30,6 +31,7 @@ export const useFetchGameData = () => {
     sourceId: null,
     targetId: null,
     actionId: null,
+    state: [],
   });
 
   const fetchGameData = () => {
@@ -51,7 +53,6 @@ export const useFetchGameData = () => {
         return new Player(player.id, player.name, units, panels);
       });
       setPlayers(players);
-
       setIsLoading(false);
     });
   };
