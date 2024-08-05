@@ -9,11 +9,19 @@ type ActionMenu = (
       name: string;
       actionId: string;
       actions?: undefined;
+      targets?: undefined;
     }
   | {
       name: string;
       actionId: string;
       actions: ActionMenu;
+      targets?: undefined;
+    }
+  | {
+      name: string;
+      actionId: string;
+      actions?: undefined;
+      targets: { name: string; targetId: string }[];
     }
 )[];
 
