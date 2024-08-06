@@ -1,23 +1,18 @@
-export type ActionMenu = (
-  | {
+export type Action = {
+  name: string;
+  actionId: string;
+  targetId?: string;
+  more?: ActionMenu;  
+};
+
+export type ActionMenu = ({
       name: string;
       actionId: string;
-      actions?: undefined;
-      targets?: undefined;
-    }
-  | {
-      name: string;
-      actionId: string;
-      actions: ActionMenu;
-      targets?: undefined;
-    }
-  | {
-      name: string;
-      actionId: string;
-      actions?: undefined;
-      targets: ActionMenu;
-    }
-)[];
+      //more?: ActionMenu;
+      //isTarget: boolean;
+      actions?: ActionMenu; //actions: Option[ActionMenu]
+      targets?: ActionMenu;
+})[];
 
 export const parseActionMenu = (
   jsonData: {

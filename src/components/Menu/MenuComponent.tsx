@@ -2,15 +2,15 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Character from "../../model/Character";
 import { ActionMenu, parseActionMenu } from "./util";
-import ActionSelector from "./ActionSelector";
+import ActionSelector from "./ActionSelectorv2";
 import UnitList from "./UnitList";
 import "./menu.css";
 
 interface Props {
   currentUnit: string;
-  actionSelected: string;
-  setActionSelected: (actionId: string) => void;
-  receiveAction: (id: string) => void;
+  actionSelected: string | null;
+  setActionSelected: (actionId: string | null) => void;
+  setTargetSelected: (id: string | null) => void;
   units: Character[];
   units2: Character[];
 }
@@ -19,7 +19,7 @@ const MenuComponent = ({
   currentUnit,
   actionSelected,
   setActionSelected,
-  receiveAction,
+  setTargetSelected,
   units,
   units2,
 }: Props) => {
@@ -40,10 +40,9 @@ const MenuComponent = ({
       <UnitList units={units} />
       <div className="action-selection">
         <ActionSelector
-          isVisible={actionSelected.includes("MainMenu")}
           currentUnit={currentUnit}
           setActionSelected={setActionSelected}
-          handleClick={receiveAction}
+          setTargetSelected={setTargetSelected}
           actionSelected={actionSelected}
           actionMenu={menu}
         />

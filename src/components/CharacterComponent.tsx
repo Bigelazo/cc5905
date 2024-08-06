@@ -2,7 +2,7 @@ import Character from "../model/Character";
 import Tooltip from "@mui/material/Tooltip";
 
 interface Props {
-  actionSelected: string;
+  actionSelected: string | null;
   c: Character;
   handleClick: (id: string) => void;
 }

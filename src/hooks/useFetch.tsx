@@ -9,8 +9,10 @@ interface FetchGameDataProps {
   players: Player[];
   currentUnit: string;
   setCurrentUnit: (currentUnit: string) => void;
-  actionSelected: string;
-  setActionSelected: (actionSelected: string) => void;
+  actionSelected: string | null;
+  setActionSelected: (actionSelected: string | null) => void;
+  targetSelected: string | null;
+  setTargetSelected: (targetSelected :string | null) => void;
   lastAction: LastActionType;
   setLastAction: (lastAction: LastActionType) => void;
 }
@@ -25,7 +27,8 @@ export const useFetchGameData = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [players, setPlayers] = useState<Player[]>([]);
   const [currentUnit, setCurrentUnit] = useState<string>("");
-  const [actionSelected, setActionSelected] = useState<string>("MainMenu");
+  const [actionSelected, setActionSelected] = useState<string | null>(null);
+  const [targetSelected, setTargetSelected] = useState<string | null>(null);
   const [lastAction, setLastAction] = useState<LastActionType>({
     sourceId: null,
     targetId: null,
@@ -67,6 +70,8 @@ export const useFetchGameData = () => {
     setCurrentUnit,
     actionSelected,
     setActionSelected,
+    targetSelected,
+    setTargetSelected,
     lastAction,
     setLastAction,
   };
