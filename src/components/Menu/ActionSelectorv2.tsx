@@ -92,14 +92,11 @@ const ActionSelectorv2 = ({
             setBreadCrumb([]);
         }
     }, [actionSelected])
-
-    console.log("oldmenu", actionMenu)
-    console.log(currentMenu)
     return (
         <>
         {currentMenu.map((action, index) => {
             const onClick = action.more ? () => setBreadCrumb([...breadCrumb, index]) : onClickAction(action);
-            return <ButtonComponent 
+            return <ButtonComponent key={"bc"+index}
             selected={actionSelected === action.actionId}
             onClick={onClick}>{action.name}</ButtonComponent>
         })}

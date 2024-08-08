@@ -12,10 +12,10 @@ const CharacterComponent = ({ actionSelected, c, handleClick }: Props) => {
     <Tooltip
       title={
         <div>
-          {Object.entries(c.attributes).map(([key, value]) => {
+          {c.attributes.map(v => {
             return (
-              <div className="info-others" key={key}>
-                <label className="info-label">{key}:</label> {value}
+              <div className="info-others" key={v.name}>
+                <label className="info-label">{v.name.toUpperCase()}:</label> {v.value}
               </div>
             );
           })}

@@ -39,7 +39,6 @@ const GridComponent = ({
       }}
     >
       {panels.map((p: Panel) => {
-        console.log(p)
         const charactersInPanel = characters.filter((c: Character) => p.storage.includes(c.id));
         return (
           <div

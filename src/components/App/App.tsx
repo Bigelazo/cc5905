@@ -94,7 +94,7 @@ const App = () => {
                     key={c.id}
                     style={currentUnit === c.id ? { color: "yellow" } : {}}
                   >
-                    {c?.attributes?.name}
+                    {c?.attributes.find((a) => a.name === "name")?.value}
                   </div>
                 );
               })}
