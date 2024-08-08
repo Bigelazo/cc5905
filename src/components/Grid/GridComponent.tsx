@@ -10,7 +10,8 @@ import Animation from "./Animation";
 interface Props {
   currentUnit: string;
   actionSelected: string | null;
-  player: Player;
+  characters: Character[];
+  panels: Panel[];
   size: [number, number];
   //handleClick: (id: string) => void;
   setTargetSelected: (id: string | null) => void;
@@ -21,7 +22,8 @@ interface Props {
 const GridComponent = ({
   currentUnit,
   actionSelected,
-  player,
+  characters,
+  panels,
   size,
   //handleClick,
   setTargetSelected,
@@ -31,12 +33,14 @@ const GridComponent = ({
     <div
       className="grid"
       style={{
-        gridTemplateColumns: `repeat(${size[1]}, 1fr)`,
-        gridTemplateRows: `repeat(${size[0]}, 1fr)`,
+        //gridTemplateColumns: `repeat(${size[1]}, minmax(0, 1fr))`,
+        gridTemplateRows: `repeat(${size[0]}, minmax(0, 1fr))`,
         position: "relative",
       }}
     >
-      {player.panels.map((p: Panel) => {
+      {panels.map((p: Panel) => {
+        console.log(p)
+        const charactersInPanel = characters.filter((c: Character) => p.storage.includes(c.id));
         return (
           <div
             id={"panel_"+p.id}
@@ -50,8 +54,8 @@ const GridComponent = ({
                 : () => {}
             }
             style={
-              p.storage.length != 0
-                ? p.storage.map((c) => c.id).includes(currentUnit)
+              charactersInPanel.length != 0
+                ? charactersInPanel.map((c) => c.id).includes(currentUnit)
                   ? {
                       gridColumnStart: p.x,
                       gridRowStart: p.y,
@@ -61,7 +65,7 @@ const GridComponent = ({
                 : { gridColumnStart: p.x, gridRowStart: p.y }
             }
           >
-            {p.storage.map((char: Character) => {
+            {charactersInPanel.map((char: Character) => {
               return (
                 <Animation
                   key={char.id}

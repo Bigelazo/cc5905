@@ -36,6 +36,7 @@ const App = () => {
   const {
     isLoading,
     players,
+    panels,
     currentUnit,
     setCurrentUnit,
     actionSelected,
@@ -74,7 +75,8 @@ const App = () => {
           sourceId: currentUnit,
           targetId: targetId,
           actionId: actionSelected,
-          state: players,
+          players: players,
+          panels: panels,
         });
       });
   };
@@ -92,24 +94,20 @@ const App = () => {
                     key={c.id}
                     style={currentUnit === c.id ? { color: "yellow" } : {}}
                   >
-                    {c.attributes["NAME"]}
+                    {c?.attributes?.name}
                   </div>
                 );
               })}
             </div>
-            {players.map((player) => {
-              return (
-                <GridComponent
-                  key={player.id}
+            <GridComponent
                   currentUnit={currentUnit}
                   actionSelected={actionSelected}
-                  player={player}
+                  characters={allUnits}
+                  panels={panels}
                   size={[3, 3]}
                   setTargetSelected={setTargetSelected}
                   lastAction={lastAction}
                 />
-              );
-            })}
           </div>
           {!isLoading && (
             <MenuComponent

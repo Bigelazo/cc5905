@@ -7,6 +7,7 @@ import Player from "../model/Player";
 interface FetchGameDataProps {
   isLoading: boolean;
   players: Player[];
+  panels: Panel[];
   currentUnit: string;
   setCurrentUnit: (currentUnit: string) => void;
   actionSelected: string | null;
@@ -21,12 +22,14 @@ export type LastActionType = {
   sourceId: string | null;
   targetId: string | null;
   actionId: string | null;
-  state: Player[];
+  players: Player[];
+  panels: Panel[];
 };
 
 export const useFetchGameData = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [players, setPlayers] = useState<Player[]>([]);
+  const [panels, setPanels] = useState<Panel[]>([]);
   const [currentUnit, setCurrentUnit] = useState<string>("");
   const [actionSelected, setActionSelected] = useState<string | null>(null);
   const [targetSelected, setTargetSelected] = useState<string | null>(null);
@@ -34,7 +37,8 @@ export const useFetchGameData = () => {
     sourceId: null,
     targetId: null,
     actionId: null,
-    state: [],
+    players: [],
+    panels: [],
   });
 
   const fetchGameData = () => {
@@ -44,18 +48,21 @@ export const useFetchGameData = () => {
       setCurrentUnit(currentUnit);
 
       const players: Player[] = playerData.map((player: any) => {
-        let units: Character[] = [];
-        const panels: Panel[] = player.panels.map((panel: any) => {
+        let units: Character[] = player.characters.map((c: any) => new Character(c.id, c.img, c.attributes));
+        console.log(units)
+        /*const panels: Panel[] = player.panels.map((panel: any) => {
           const panelUnits = panel.storage.map((c: any) => {
-            const unit = new Character(c.id, c.img, c.attributes);
+            
             units.push(unit);
             return unit;
           });
           return new Panel(panel.id, panel.x, panel.y, panelUnits);
-        });
-        return new Player(player.id, player.name, units, panels);
+        });*/
+        return new Player(player.id, player.name, units);
       });
+      
       setPlayers(players);
+      setPanels(response.data.panels.map((p: any) => new Panel(p.id, p.x, p.y, p.storage)))
       setIsLoading(false);
     });
   };
@@ -67,6 +74,7 @@ export const useFetchGameData = () => {
   const response: FetchGameDataProps = {
     isLoading,
     players,
+    panels,
     currentUnit,
     setCurrentUnit,
     actionSelected,

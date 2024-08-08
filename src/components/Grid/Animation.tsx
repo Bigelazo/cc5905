@@ -11,23 +11,21 @@ interface Props {
     lastAction: LastActionType;
 }
 
-function findPanelByCharId(charId: string, state: Player[]): Panel | null {
-    for (const player of state) {
-        for (const panel of player.panels) {
-            for (const unit of panel.storage) {
-                if (unit.id === charId) {
-                    return panel;
-                }
+function findPanelByCharId(charId: string, panels: Panel[]): Panel | null {
+    
+    for (const panel of panels) {
+        for (const unitId of panel.storage) {
+            if (unitId === charId) {
+                return panel;
             }
         }
     }
+    
     return null;
 }
 const Animation = ({children, char, panel, lastAction}: Props) => {
     if(lastAction.sourceId == char.id){
-        console.log("Animation", lastAction);
-        console.log("panel", );
-        const sourcePanel = findPanelByCharId(char.id, lastAction.state);
+        const sourcePanel = findPanelByCharId(char.id, lastAction.panels);
         const from = document.getElementById("panel_"+sourcePanel?.id)?.getBoundingClientRect();
         const to = document.getElementById("panel_"+lastAction.targetId)?.getBoundingClientRect();
         if(from && to){
