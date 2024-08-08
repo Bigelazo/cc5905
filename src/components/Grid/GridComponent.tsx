@@ -9,10 +9,11 @@ import Animation from "./Animation";
 
 interface Props {
   currentUnit: string;
-  actionSelected: string;
+  actionSelected: string | null;
   player: Player;
   size: [number, number];
-  handleClick: (id: string) => void;
+  //handleClick: (id: string) => void;
+  setTargetSelected: (id: string | null) => void;
   lastAction: LastActionType;
 }
 
@@ -22,7 +23,8 @@ const GridComponent = ({
   actionSelected,
   player,
   size,
-  handleClick,
+  //handleClick,
+  setTargetSelected,
   lastAction,
 }: Props) => {
   return (
@@ -41,9 +43,9 @@ const GridComponent = ({
             key={p.id}
             className={"grid__panel"}
             onClick={
-              actionSelected == "2"
+              actionSelected?.includes("2")
                 ? () => {
-                    handleClick(p.id);
+                    setTargetSelected(p.id);
                   }
                 : () => {}
             }
@@ -70,7 +72,7 @@ const GridComponent = ({
                   <CharacterComponent
                     actionSelected={actionSelected}
                     c={char}
-                    handleClick={handleClick}
+                    handleClick={setTargetSelected}
                   />
                 </Animation>
               );

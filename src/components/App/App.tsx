@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useFetchGameData } from "../../hooks/useFetch";
@@ -40,22 +40,39 @@ const App = () => {
     setCurrentUnit,
     actionSelected,
     setActionSelected,
+    targetSelected,
+    setTargetSelected,
     lastAction,
     setLastAction,
   } = useFetchGameData();
 
+  console.log("Action selected: " + actionSelected);
+
   const allUnits = players.map((p) => p.units).flat();
 
-  const receiveAction = (id: string) => {
+  useEffect(() => {
+    if(actionSelected != null && targetSelected != null) {
+      executeAction(targetSelected)
+    }
+  }, [actionSelected, targetSelected])
+
+  const executeAction = (targetId: string) => {
+    /*const actionBreadCrumb = actionSelected.split("→");
+    const theRealActionSelected = actionBreadCrumb[actionBreadCrumb.length - 1];
+    const secretAction = actionBreadCrumb[actionBreadCrumb.length - 2];
+    const target = secretAction.includes("↓") ? secretAction.split("↓")[1] : id;*/
     axios
-      .post(`${HOST}/execute-action/${actionSelected}/${currentUnit}/${id}`)
+      .post(
+        `${HOST}/execute-action/${actionSelected}/${currentUnit}/${targetId}`
+      )
       .then((response) => {
         setCurrentUnit(response.data.currentUnit);
         setMessage(response.data.message);
-        setActionSelected("-1");
+        setActionSelected(null);
+        setTargetSelected(null);
         setLastAction({
           sourceId: currentUnit,
-          targetId: id,
+          targetId: targetId,
           actionId: actionSelected,
           state: players,
         });
@@ -88,7 +105,7 @@ const App = () => {
                   actionSelected={actionSelected}
                   player={player}
                   size={[3, 3]}
-                  handleClick={receiveAction}
+                  setTargetSelected={setTargetSelected}
                   lastAction={lastAction}
                 />
               );
@@ -99,6 +116,7 @@ const App = () => {
               currentUnit={currentUnit}
               actionSelected={actionSelected}
               setActionSelected={setActionSelected}
+              setTargetSelected={setTargetSelected}
               units={players[0].units}
               units2={players[1].units}
             />
