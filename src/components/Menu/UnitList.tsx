@@ -6,10 +6,10 @@ const UnitList = ({ units }: { units: Character[] }) => {
       {units.map((c: Character) => {
         return (
           <div key={c.id} className="info">
-            {Object.entries(c.attributes).map(([key, value]) => {
+            {c.attributes.map(a => {
               return (
-                <div key={key} className="info-others">
-                  <label className="info-label">{key}:</label> {value}
+                <div key={a.name} className="info-others">
+                  <label className="info-label">{a.name.toUpperCase()}:</label> {a.value}
                 </div>
               );
             })}

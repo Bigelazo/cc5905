@@ -30,17 +30,14 @@ const ActionSelectorv2 = ({
   actionMenu,
 }: ActionSelectorProps) => {
   const [breadCrumb, setBreadCrumb] = useState<number[]>([]);
-  console.log(actionMenu);
+  //const menu = actionMenu;
   const currentMenu = drawMenu(actionMenu, breadCrumb);
 
   const onClickAction = (action: Action) => () => {
-    if (action.targetId && action.actionId) {
+    if (action.targetId) {
       console.log("Target selected");
-      setActionSelected(action.actionId);
-      setTargetSelected(action.targetId);
-    } else if (action.actionId) {
+    } else {
       console.log("Action selected");
-      setActionSelected(action.actionId);
     }
   };
 
@@ -58,6 +55,7 @@ const ActionSelectorv2 = ({
           : onClickAction(action);
         return (
           <ButtonComponent
+            key={"bc" + index}
             selected={actionSelected === action.actionId}
             onClick={onClick}
           >

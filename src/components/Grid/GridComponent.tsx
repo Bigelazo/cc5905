@@ -1,25 +1,29 @@
-import { motion } from "framer-motion";
+
 import { LastActionType } from "../../hooks/useFetch";
 import CharacterComponent from "../CharacterComponent";
 import Character from "../../model/Character";
 import Panel from "../../model/Panel";
 import Player from "../../model/Player";
 import "./grid.css";
+import Animation from "./Animation";
 
 interface Props {
   currentUnit: string;
   actionSelected: string | null;
-  player: Player;
+  characters: Character[];
+  panels: Panel[];
   size: [number, number];
   //handleClick: (id: string) => void;
   setTargetSelected: (id: string | null) => void;
   lastAction: LastActionType;
 }
 
+
 const GridComponent = ({
   currentUnit,
   actionSelected,
-  player,
+  characters,
+  panels,
   size,
   //handleClick,
   setTargetSelected,
@@ -29,14 +33,16 @@ const GridComponent = ({
     <div
       className="grid"
       style={{
-        gridTemplateColumns: `repeat(${size[1]}, 1fr)`,
-        gridTemplateRows: `repeat(${size[0]}, 1fr)`,
+        //gridTemplateColumns: `repeat(${size[1]}, minmax(0, 1fr))`,
+        gridTemplateRows: `repeat(${size[0]}, minmax(0, 1fr))`,
         position: "relative",
       }}
     >
-      {player.panels.map((p: Panel) => {
+      {panels.map((p: Panel) => {
+        const charactersInPanel = characters.filter((c: Character) => p.storage.includes(c.id));
         return (
           <div
+            id={"panel_"+p.id}
             key={p.id}
             className={"grid__panel"}
             onClick={
@@ -47,8 +53,8 @@ const GridComponent = ({
                 : () => {}
             }
             style={
-              p.storage.length != 0
-                ? p.storage.map((c) => c.id).includes(currentUnit)
+              charactersInPanel.length != 0
+                ? charactersInPanel.map((c) => c.id).includes(currentUnit)
                   ? {
                       gridColumnStart: p.x,
                       gridRowStart: p.y,
@@ -58,24 +64,20 @@ const GridComponent = ({
                 : { gridColumnStart: p.x, gridRowStart: p.y }
             }
           >
-            {p.storage.map((char: Character) => {
-              const ops =
-                false && lastAction.sourceId && lastAction.sourceId == char.id
-                  ? { animate: { x: 10, y: 20 } }
-                  : {};
+            {charactersInPanel.map((char: Character) => {
               return (
-                <motion.div
+                <Animation
                   key={char.id}
-                  {...ops}
-                  animate={{ x: 10, y: 20 }}
-                  transition={{ type: "spring" }}
+                  panel={p}
+                  char={char}
+                  lastAction={lastAction}
                 >
                   <CharacterComponent
                     actionSelected={actionSelected}
                     c={char}
                     handleClick={setTargetSelected}
                   />
-                </motion.div>
+                </Animation>
               );
             })}
           </div>

@@ -5,13 +5,11 @@ class Player {
   id: string;
   name: string;
   units: Character[];
-  panels: Panel[];
 
-  constructor(id: string, name: string, units: Character[], panels: Panel[]) {
+  constructor(id: string, name: string, units: Character[]) {
     this.id = id;
     this.name = name;
     this.units = units;
-    this.panels = panels;
   }
 }
 
