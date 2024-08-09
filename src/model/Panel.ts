@@ -4,9 +4,9 @@ class Panel {
   id: string;
   x: number;
   y: number;
-  storage: Character[] = [];
+  storage: string[] = [];
 
-  constructor(id: string, x: number, y: number, storage: Character[]) {
+  constructor(id: string, x: number, y: number, storage: string[]) {
     this.id = id;
     this.x = x;
     this.y = y;

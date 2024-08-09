@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useFetchGameData } from "../../hooks/useFetch";
@@ -35,27 +35,43 @@ const App = () => {
   const {
     isLoading,
     players,
+    panels,
     currentUnit,
     setCurrentUnit,
     actionSelected,
     setActionSelected,
+    targetSelected,
+    setTargetSelected,
     lastAction,
     setLastAction,
   } = useFetchGameData();
 
+  console.log("Action selected: " + actionSelected);
+
   const allUnits = players.map((p) => p.units).flat();
 
-  const receiveAction = (id: string) => {
+  useEffect(() => {
+    if (actionSelected != null && targetSelected != null) {
+      executeAction(targetSelected);
+    }
+  }, [actionSelected, targetSelected]);
+
+  const executeAction = (targetId: string) => {
     axios
-      .post(`${HOST}/execute-action/${actionSelected}/${currentUnit}/${id}`)
+      .post(
+        `${HOST}/execute-action/${actionSelected}/${currentUnit}/${targetId}`
+      )
       .then((response) => {
         setCurrentUnit(response.data.currentUnit);
         setMessage(response.data.message);
-        setActionSelected("-1");
+        setActionSelected(undefined);
+        setTargetSelected(undefined);
         setLastAction({
           sourceId: currentUnit,
-          targetId: id,
+          targetId: targetId,
           actionId: actionSelected,
+          players: players,
+          panels: panels,
         });
       });
   };
@@ -73,30 +89,27 @@ const App = () => {
                     key={c.id}
                     style={currentUnit === c.id ? { color: "yellow" } : {}}
                   >
-                    {c.attributes["NAME"]}
+                    {c?.attributes.find((a) => a.name === "name")?.value}
                   </div>
                 );
               })}
             </div>
-            {players.map((player) => {
-              return (
-                <GridComponent
-                  key={player.id}
-                  currentUnit={currentUnit}
-                  actionSelected={actionSelected}
-                  player={player}
-                  size={[3, 3]}
-                  handleClick={receiveAction}
-                  lastAction={lastAction}
-                />
-              );
-            })}
+            <GridComponent
+              currentUnit={currentUnit}
+              actionSelected={actionSelected}
+              characters={allUnits}
+              panels={panels}
+              size={[3, 3]}
+              setTargetSelected={setTargetSelected}
+              lastAction={lastAction}
+            />
           </div>
           {!isLoading && (
             <MenuComponent
               currentUnit={currentUnit}
               actionSelected={actionSelected}
               setActionSelected={setActionSelected}
+              setTargetSelected={setTargetSelected}
               units={players[0].units}
               units2={players[1].units}
             />
