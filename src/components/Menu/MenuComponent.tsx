@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Character from "../../model/Character";
 import { Action, parseActionMenu } from "./util";
-import ActionSelector from "./ActionSelectorv2";
+import ActionSelector from "./ActionSelector";
 import UnitList from "./UnitList";
 import "./menu.css";
 
@@ -26,9 +26,9 @@ const MenuComponent = ({
   const [menu, setMenu] = useState<Action[]>([]);
 
   const showCurrentUnitActions = () => {
-    axios.get(`${HOST}/show-actions/${currentUnit}`).then((response) => {
-      setMenu(parseActionMenu(response.data.actions));
-    });
+    axios
+      .get(`${HOST}/show-actions/${currentUnit}`)
+      .then((response) => setMenu(parseActionMenu(response.data.actions)));
   };
 
   useEffect(() => {

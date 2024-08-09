@@ -46,9 +46,6 @@ const App = () => {
     setLastAction,
   } = useFetchGameData();
 
-  console.log("Action selected: " + actionSelected);
-  console.log("Target selected: " + targetSelected);
-
   const allUnits = players.map((p) => p.units).flat();
 
   useEffect(() => {
@@ -100,7 +97,6 @@ const App = () => {
               actionSelected={actionSelected}
               characters={allUnits}
               panels={panels}
-              size={[3, 3]}
               setTargetSelected={setTargetSelected}
               lastAction={lastAction}
             />
@@ -118,7 +114,6 @@ const App = () => {
         </div>
       </div>
       <button onClick={() => axios.get(`${HOST}/reset`)}>Reset</button>
-      {/* TODO: Hacer que el botón re-renderee App */}
     </ThemeProvider>
   );
 };

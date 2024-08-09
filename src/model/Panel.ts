@@ -1,5 +1,3 @@
-import Character from "./Character";
-
 class Panel {
   id: string;
   x: number;

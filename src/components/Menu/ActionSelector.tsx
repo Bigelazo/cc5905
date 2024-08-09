@@ -10,21 +10,24 @@ interface Props {
   actionMenu: Action[];
 }
 
-function drawMenu(menu: any[], breadCrumb: number[]) {
+function drawMenu(menu: Action[], breadCrumb: number[]) {
   if (breadCrumb.length === 0) {
     return menu;
   } else {
     let currentMenu = menu;
     for (let i = 0; i < breadCrumb.length; i++) {
-      currentMenu[breadCrumb[i]].more
-        ? (currentMenu = currentMenu[breadCrumb[i]].more)
-        : (currentMenu = []);
+      const more = currentMenu[breadCrumb[i]].more;
+      if (more !== undefined) {
+        currentMenu = more;
+      } else {
+        currentMenu = [];
+      }
     }
     return currentMenu;
   }
 }
 
-const ActionSelectorv2 = ({
+const ActionSelector = ({
   actionSelected,
   setActionSelected,
   setTargetSelected,
@@ -40,10 +43,7 @@ const ActionSelectorv2 = ({
     setActionSelected(action.actionId);
   };
 
-  const onClickMore = (action: Action, index: number) => {
-    setActionSelected(undefined);
-    setBreadCrumb([...breadCrumb, index]);
-  };
+  const onClickMore = (index: number) => setBreadCrumb([...breadCrumb, index]);
 
   const onClickBack = () => {
     setTargetSelected(undefined);
@@ -60,7 +60,7 @@ const ActionSelectorv2 = ({
     <>
       {currentMenu.map((action, index) => {
         const onClick = action.more
-          ? () => onClickMore(action, index)
+          ? () => onClickMore(index)
           : () => onClickAction(action);
         return (
           <ButtonComponent
@@ -80,4 +80,4 @@ const ActionSelectorv2 = ({
     </>
   );
 };
-export default ActionSelectorv2;
+export default ActionSelector;

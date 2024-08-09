@@ -1,5 +1,4 @@
 import Character from "./Character";
-import Panel from "./Panel";
 
 class Player {
   id: string;
