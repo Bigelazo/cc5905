@@ -10,7 +10,6 @@ interface Props {
   actionSelected: string | undefined;
   characters: Character[];
   panels: Panel[];
-  size: [number, number];
   setTargetSelected: (id: string | undefined) => void;
   lastAction: LastActionType;
 }
@@ -20,7 +19,6 @@ const GridComponent = ({
   actionSelected,
   characters,
   panels,
-  size,
   setTargetSelected,
   lastAction,
 }: Props) => {
@@ -28,7 +26,7 @@ const GridComponent = ({
     <div
       className="grid"
       style={{
-        gridTemplateRows: `repeat(${size[0]}, minmax(0, 1fr))`,
+        gridTemplateRows: `repeat(minmax(0, 1fr))`,
         position: "relative",
       }}
     >
