@@ -4,9 +4,9 @@ import ButtonComponent from "../ButtonComponent";
 
 interface ActionSelectorProps {
   currentUnit: string;
-  actionSelected: string | null;
-  setActionSelected: (actionId: string | null) => void;
-  setTargetSelected: (id: string | null) => void;
+  actionSelected: string | undefined;
+  setActionSelected: (actionId: string | undefined) => void;
+  setTargetSelected: (id: string | undefined) => void;
   actionMenu: Action[];
 }
 
@@ -30,13 +30,14 @@ const ActionSelectorv2 = ({
   actionMenu,
 }: ActionSelectorProps) => {
   const [breadCrumb, setBreadCrumb] = useState<number[]>([]);
-  //const menu = actionMenu;
   const currentMenu = drawMenu(actionMenu, breadCrumb);
 
   const onClickAction = (action: Action) => () => {
     if (action.targetId) {
+      setTargetSelected(action.actionId);
       console.log("Target selected");
     } else {
+      setActionSelected(action.actionId);
       console.log("Action selected");
     }
   };

@@ -10,18 +10,18 @@ interface FetchGameDataProps {
   panels: Panel[];
   currentUnit: string;
   setCurrentUnit: (currentUnit: string) => void;
-  actionSelected: string | null;
-  setActionSelected: (actionSelected: string | null) => void;
-  targetSelected: string | null;
-  setTargetSelected: (targetSelected :string | null) => void;
+  actionSelected: string | undefined;
+  setActionSelected: (actionSelected: string | undefined) => void;
+  targetSelected: string | undefined;
+  setTargetSelected: (targetSelected: string | undefined) => void;
   lastAction: LastActionType;
   setLastAction: (lastAction: LastActionType) => void;
 }
 
 export type LastActionType = {
-  sourceId: string | null;
-  targetId: string | null;
-  actionId: string | null;
+  sourceId: string | undefined;
+  targetId: string | undefined;
+  actionId: string | undefined;
   players: Player[];
   panels: Panel[];
 };
@@ -31,12 +31,16 @@ export const useFetchGameData = () => {
   const [players, setPlayers] = useState<Player[]>([]);
   const [panels, setPanels] = useState<Panel[]>([]);
   const [currentUnit, setCurrentUnit] = useState<string>("");
-  const [actionSelected, setActionSelected] = useState<string | null>(null);
-  const [targetSelected, setTargetSelected] = useState<string | null>(null);
+  const [actionSelected, setActionSelected] = useState<string | undefined>(
+    undefined
+  );
+  const [targetSelected, setTargetSelected] = useState<string | undefined>(
+    undefined
+  );
   const [lastAction, setLastAction] = useState<LastActionType>({
-    sourceId: null,
-    targetId: null,
-    actionId: null,
+    sourceId: undefined,
+    targetId: undefined,
+    actionId: undefined,
     players: [],
     panels: [],
   });
@@ -44,25 +48,20 @@ export const useFetchGameData = () => {
   const fetchGameData = () => {
     axios.get(`${HOST}/start`).then((response) => {
       const playerData = response.data.players;
-      const currentUnit = response.data.currentUnit;
-      setCurrentUnit(currentUnit);
-
-      const players: Player[] = playerData.map((player: any) => {
-        let units: Character[] = player.characters.map((c: any) => new Character(c.id, c.img, c.attributes));
-        console.log(units)
-        /*const panels: Panel[] = player.panels.map((panel: any) => {
-          const panelUnits = panel.storage.map((c: any) => {
-            
-            units.push(unit);
-            return unit;
-          });
-          return new Panel(panel.id, panel.x, panel.y, panelUnits);
-        });*/
-        return new Player(player.id, player.name, units);
-      });
-      
-      setPlayers(players);
-      setPanels(response.data.panels.map((p: any) => new Panel(p.id, p.x, p.y, p.storage)))
+      setCurrentUnit(response.data.currentUnit);
+      setPlayers(
+        playerData.map((player: any) => {
+          let units: Character[] = player.characters.map(
+            (c: any) => new Character(c.id, c.img, c.attributes)
+          );
+          return new Player(player.id, player.name, units);
+        })
+      );
+      setPanels(
+        response.data.panels.map(
+          (p: any) => new Panel(p.id, p.x, p.y, p.storage)
+        )
+      );
       setIsLoading(false);
     });
   };

@@ -27,7 +27,6 @@ const theme = createTheme({
   },
 });
 
-
 const App = () => {
   console.log("Rendering App");
 
@@ -65,8 +64,8 @@ const App = () => {
       .then((response) => {
         setCurrentUnit(response.data.currentUnit);
         setMessage(response.data.message);
-        setActionSelected(null);
-        setTargetSelected(null);
+        setActionSelected(undefined);
+        setTargetSelected(undefined);
         setLastAction({
           sourceId: currentUnit,
           targetId: targetId,
@@ -96,14 +95,14 @@ const App = () => {
               })}
             </div>
             <GridComponent
-                  currentUnit={currentUnit}
-                  actionSelected={actionSelected}
-                  characters={allUnits}
-                  panels={panels}
-                  size={[3, 3]}
-                  setTargetSelected={setTargetSelected}
-                  lastAction={lastAction}
-                />
+              currentUnit={currentUnit}
+              actionSelected={actionSelected}
+              characters={allUnits}
+              panels={panels}
+              size={[3, 3]}
+              setTargetSelected={setTargetSelected}
+              lastAction={lastAction}
+            />
           </div>
           {!isLoading && (
             <MenuComponent

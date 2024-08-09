@@ -8,9 +8,9 @@ import "./menu.css";
 
 interface Props {
   currentUnit: string;
-  actionSelected: string | null;
-  setActionSelected: (actionId: string | null) => void;
-  setTargetSelected: (id: string | null) => void;
+  actionSelected: string | undefined;
+  setActionSelected: (actionId: string | undefined) => void;
+  setTargetSelected: (id: string | undefined) => void;
   units: Character[];
   units2: Character[];
 }

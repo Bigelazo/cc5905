@@ -1,23 +1,19 @@
-
 import { LastActionType } from "../../hooks/useFetch";
 import CharacterComponent from "../CharacterComponent";
 import Character from "../../model/Character";
 import Panel from "../../model/Panel";
-import Player from "../../model/Player";
 import "./grid.css";
 import Animation from "./Animation";
 
 interface Props {
   currentUnit: string;
-  actionSelected: string | null;
+  actionSelected: string | undefined;
   characters: Character[];
   panels: Panel[];
   size: [number, number];
-  //handleClick: (id: string) => void;
-  setTargetSelected: (id: string | null) => void;
+  setTargetSelected: (id: string | undefined) => void;
   lastAction: LastActionType;
 }
-
 
 const GridComponent = ({
   currentUnit,
@@ -25,7 +21,6 @@ const GridComponent = ({
   characters,
   panels,
   size,
-  //handleClick,
   setTargetSelected,
   lastAction,
 }: Props) => {
@@ -33,16 +28,17 @@ const GridComponent = ({
     <div
       className="grid"
       style={{
-        //gridTemplateColumns: `repeat(${size[1]}, minmax(0, 1fr))`,
         gridTemplateRows: `repeat(${size[0]}, minmax(0, 1fr))`,
         position: "relative",
       }}
     >
       {panels.map((p: Panel) => {
-        const charactersInPanel = characters.filter((c: Character) => p.storage.includes(c.id));
+        const charactersInPanel = characters.filter((c: Character) =>
+          p.storage.includes(c.id)
+        );
         return (
           <div
-            id={"panel_"+p.id}
+            id={"panel_" + p.id}
             key={p.id}
             className={"grid__panel"}
             onClick={
