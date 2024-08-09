@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { Action } from "./util";
 import ButtonComponent from "../ButtonComponent";
 
-interface ActionSelectorProps {
+interface Props {
   currentUnit: string;
   actionSelected: string | undefined;
   setActionSelected: (actionId: string | undefined) => void;
-  setTargetSelected: (id: string | undefined) => void;
+  setTargetSelected: (targetId: string | undefined) => void;
   actionMenu: Action[];
 }
 
@@ -16,34 +16,42 @@ function drawMenu(menu: any[], breadCrumb: number[]) {
   } else {
     let currentMenu = menu;
     for (let i = 0; i < breadCrumb.length; i++) {
-      currentMenu = currentMenu[breadCrumb[i]].more;
+      currentMenu[breadCrumb[i]].more
+        ? (currentMenu = currentMenu[breadCrumb[i]].more)
+        : (currentMenu = []);
     }
     return currentMenu;
   }
 }
 
 const ActionSelectorv2 = ({
-  currentUnit,
   actionSelected,
   setActionSelected,
   setTargetSelected,
   actionMenu,
-}: ActionSelectorProps) => {
+}: Props) => {
   const [breadCrumb, setBreadCrumb] = useState<number[]>([]);
   const currentMenu = drawMenu(actionMenu, breadCrumb);
 
-  const onClickAction = (action: Action) => () => {
+  const onClickAction = (action: Action) => {
     if (action.targetId) {
-      setTargetSelected(action.actionId);
-      console.log("Target selected");
-    } else {
-      setActionSelected(action.actionId);
-      console.log("Action selected");
+      setTargetSelected(action.targetId);
     }
+    setActionSelected(action.actionId);
+  };
+
+  const onClickMore = (action: Action, index: number) => {
+    setActionSelected(undefined);
+    setBreadCrumb([...breadCrumb, index]);
+  };
+
+  const onClickBack = () => {
+    setTargetSelected(undefined);
+    setBreadCrumb(breadCrumb.slice(0, -1));
   };
 
   useEffect(() => {
-    if (actionSelected === null) {
+    if (actionSelected === undefined) {
       setBreadCrumb([]);
     }
   }, [actionSelected]);
@@ -52,11 +60,11 @@ const ActionSelectorv2 = ({
     <>
       {currentMenu.map((action, index) => {
         const onClick = action.more
-          ? () => setBreadCrumb([...breadCrumb, index])
-          : onClickAction(action);
+          ? () => onClickMore(action, index)
+          : () => onClickAction(action);
         return (
           <ButtonComponent
-            key={"bc" + index}
+            key={index}
             selected={actionSelected === action.actionId}
             onClick={onClick}
           >
@@ -65,10 +73,7 @@ const ActionSelectorv2 = ({
         );
       })}
       {breadCrumb.length > 0 && (
-        <ButtonComponent
-          selected={false}
-          onClick={() => setBreadCrumb(breadCrumb.slice(0, -1))}
-        >
+        <ButtonComponent selected={false} onClick={onClickBack}>
           Back
         </ButtonComponent>
       )}

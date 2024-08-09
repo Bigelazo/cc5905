@@ -47,11 +47,12 @@ const App = () => {
   } = useFetchGameData();
 
   console.log("Action selected: " + actionSelected);
+  console.log("Target selected: " + targetSelected);
 
   const allUnits = players.map((p) => p.units).flat();
 
   useEffect(() => {
-    if (actionSelected != null && targetSelected != null) {
+    if (actionSelected != undefined && targetSelected != undefined) {
       executeAction(targetSelected);
     }
   }, [actionSelected, targetSelected]);
