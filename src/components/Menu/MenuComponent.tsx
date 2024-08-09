@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Character from "../../model/Character";
-import { ActionMenu, parseActionMenu } from "./util";
+import { Action, parseActionMenu } from "./util";
 import ActionSelector from "./ActionSelectorv2";
 import UnitList from "./UnitList";
 import "./menu.css";
@@ -10,7 +10,7 @@ interface Props {
   currentUnit: string;
   actionSelected: string | null;
   setActionSelected: (actionId: string | null) => void;
-  setTargetSelected: (id: string | null) => void;
+  setTargetSelected: (id: string | null) => void;
   units: Character[];
   units2: Character[];
 }
@@ -23,7 +23,7 @@ const MenuComponent = ({
   units,
   units2,
 }: Props) => {
-  const [menu, setMenu] = useState<ActionMenu>([]);
+  const [menu, setMenu] = useState<Action[]>([]);
 
   const showCurrentUnitActions = () => {
     axios.get(`${HOST}/show-actions/${currentUnit}`).then((response) => {

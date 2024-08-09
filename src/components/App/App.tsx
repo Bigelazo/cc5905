@@ -50,16 +50,12 @@ const App = () => {
   const allUnits = players.map((p) => p.units).flat();
 
   useEffect(() => {
-    if(actionSelected != null && targetSelected != null) {
-      executeAction(targetSelected)
+    if (actionSelected != null && targetSelected != null) {
+      executeAction(targetSelected);
     }
-  }, [actionSelected, targetSelected])
+  }, [actionSelected, targetSelected]);
 
   const executeAction = (targetId: string) => {
-    /*const actionBreadCrumb = actionSelected.split("→");
-    const theRealActionSelected = actionBreadCrumb[actionBreadCrumb.length - 1];
-    const secretAction = actionBreadCrumb[actionBreadCrumb.length - 2];
-    const target = secretAction.includes("↓") ? secretAction.split("↓")[1] : id;*/
     axios
       .post(
         `${HOST}/execute-action/${actionSelected}/${currentUnit}/${targetId}`

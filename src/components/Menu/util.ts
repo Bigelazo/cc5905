@@ -1,64 +1,41 @@
 export type Action = {
   name: string;
-  actionId: string;
+  actionId?: string;
   targetId?: string;
-  more?: ActionMenu;  
+  more?: Action[];  
 };
 
-export type ActionMenu = ({
-      name: string;
-      actionId: string;
-      //more?: ActionMenu;
-      //isTarget: boolean;
-      actions?: ActionMenu; //actions: Option[ActionMenu]
-      targets?: ActionMenu;
-})[];
+export const parseActionMenu = (jsonData: { id: string; action: string; targets?: { id: string, name: string }[] }[]) => {
+  let menu: Action[] = [];
 
-export const parseActionMenu = (
-  jsonData: {
-    id: string;
-    action: string;
-    targets?: { actionId: string; name: string }[];
-  }[]
-) => {
-  let selector: ActionMenu = [];
+  const addAction = (menu: Action[], actionPath: string[], actionId: string, targetId?: string) => {
+    const [current, ...rest] = actionPath;
 
-  const addActionToMenu = (
-    menu: ActionMenu,
-    breadCrumb: string[],
-    id: string,
-    targets?: { name: string; actionId: string }[]
-  ) => {
-    if (breadCrumb.length === 0) return;
-
-    const [category, ...rest] = breadCrumb;
-    let actionCategory = menu.find((item) => item.name === category);
-
-    if (!actionCategory) {
-      if (rest.length === 0) {
-        actionCategory = targets
-          ? { name: category, actionId: "Menu↓" + id, targets }
-          : { name: category, actionId: id };
-      } else {
-        actionCategory = {
-          name: category,
-          actionId: category + "Menu",
-          actions: [],
-        };
-      }
-      menu.push(actionCategory);
+    let currentAction = menu.find(item => item.name === current);
+    if (!currentAction) {
+      currentAction = { name: current, actionId: actionId };
+      menu.push(currentAction);
     }
 
-    if (rest.length > 0 && actionCategory.actions) {
-      addActionToMenu(actionCategory.actions, rest, id, targets);
+    if (rest.length > 0) {
+      if (!currentAction.more) currentAction.more = [];
+      addAction(currentAction.more, rest, actionId, targetId);
+    } else if (targetId) {
+      currentAction.targetId = targetId;
     }
   };
 
-  jsonData.map(({ action, id, targets }) => {
-    const breadCrumb = action.split("→");
-    addActionToMenu(selector, breadCrumb, id, targets);
+  jsonData.forEach(({ id, action, targets }) => {
+    const actionPath = action.split("→");
+
+    if (targets) {
+      targets.forEach(({ id: targetId, name: targetName }) => {
+        addAction(menu, [...actionPath, targetName], id, targetId);
+      });
+    } else {
+      addAction(menu, actionPath, id);
+    }
   });
 
-  console.log(selector);
-  return selector;
+  return menu;
 };
