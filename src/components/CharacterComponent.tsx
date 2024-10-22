@@ -25,7 +25,9 @@ const CharacterComponent = ({ actionSelected, c, handleClick }: Props) => {
     >
       <img
         onClick={
-          actionSelected != "2" && actionSelected != "-1"
+          actionSelected != "2" &&
+          actionSelected != "-1" &&
+          actionSelected != "3"
             ? () => {
                 handleClick(c.id);
               }
