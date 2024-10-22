@@ -40,7 +40,7 @@ const GridComponent = ({
             key={p.id}
             className={"grid__panel"}
             onClick={
-              actionSelected?.includes("2")
+              actionSelected?.includes("2") || actionSelected?.includes("3")
                 ? () => {
                     setTargetSelected(p.id);
                   }
